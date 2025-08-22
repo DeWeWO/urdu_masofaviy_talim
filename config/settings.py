@@ -17,7 +17,14 @@ SECRET_KEY = env.str('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.ngrok-free.app']
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.ngrok-free.app',
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    ]
+
 
 
 # Application definition
@@ -45,6 +52,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CSRF_EXEMPT_URLS = [
+    r'^/api/',
+]
+
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -67,12 +78,19 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+        'rest_framework.permissions.AllowAny',  # Barcha API lar public
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [],  # Authentication o'chirish
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 100
 }
+
+CORS_ALLOW_ALL_ORIGINS = True  # Development uchun
+CORS_ALLOW_CREDENTIALS = True
 
 
 # Database
