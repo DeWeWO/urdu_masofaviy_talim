@@ -44,3 +44,10 @@ class HemisTable(BaseModel):
     course = models.IntegerField()
     major = models.CharField(max_length=255)
     student_group = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.fio
+    
+    class Meta:
+        verbose_name_plural = "Hemis Table"
+        db_table = 'hemis_table'
