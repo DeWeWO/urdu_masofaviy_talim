@@ -36,3 +36,11 @@ class Register(BaseModel):
     class Meta:
         verbose_name_plural = "Register"
         db_table = 'register'
+
+class HemisTable(BaseModel):
+    hemis_id = models.BigIntegerField(unique=True, db_index=True)
+    telegram_id = models.OneToOneField(Register, on_delete=models.CASCADE, primary_key=True)
+    fio = models.CharField(max_length=255)
+    course = models.IntegerField()
+    major = models.CharField(max_length=255)
+    student_group = models.CharField(max_length=100)
