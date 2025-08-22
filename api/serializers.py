@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models import TelegramGroup
+from core.models import TelegramGroup, Register
 
 class TelegramGroupSerializers(serializers.ModelSerializer):
     class Meta:
@@ -16,3 +16,26 @@ class TelegramGroupSerializers(serializers.ModelSerializer):
             group.is_active = True
             group.save()
         return group
+
+class RegisterSerializer(serializers.ModelSerializer):
+    group_id = serializers.IntegerField(write_only=True)  # telegram group_id kiritish uchun
+
+    class Meta:
+        model = Register
+        fields = [
+            'id', 'telegram_id', 'username', 'fio',
+            'group_id', 'register_group', 'pnfl', 'tg_tel',
+            'tel', 'parent_tel', 'address', 'is_active',
+            'created', 'updated'
+        ]
+        read_only_fields = ['register_group', 'created', 'updated']
+
+    def create(self, validated_data):
+        group_id = validated_data.pop("group_id", None)
+        if group_id:
+            try:
+                tg_group = TelegramGroup.objects.get(group_id=group_id)
+            except TelegramGroup.DoesNotExist:
+                raise serializers.ValidationError({"group_id": "Bunday Telegram group mavjud emas"})
+            validated_data["register_group"] = tg_group
+        return super().create(validated_data)

@@ -8,7 +8,7 @@ class BaseModel(models.Model):
         abstract = True
 
 class TelegramGroup(models.Model):
-    group_name = models.CharField(max_length=100)
+    group_name = models.CharField(max_length=100, null=True, blank=True)
     group_id = models.BigIntegerField(unique=True, db_index=True)
     added_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
@@ -23,21 +23,22 @@ class TelegramGroup(models.Model):
 
 class Register(BaseModel):
     telegram_id = models.BigIntegerField(unique=True)
-    username = models.CharField(max_length=100)
-    fio = models.CharField(max_length=255, null=True)
-    register_group_id = models.BigIntegerField(unique=True, db_index=True)
-    pnfl = models.BigIntegerField(unique=True, null=True)
-    tg_tel = models.CharField(max_length=15, null=True)
-    tel = models.CharField(max_length=15, null=True)
-    parent_tel = models.CharField(max_length=15, null=True)
-    address = models.CharField(max_length=255, null=True)
+    username = models.CharField(max_length=100, null=True, blank=True)
+    fio = models.CharField(max_length=255, null=True, blank=True)
+    register_group = models.ForeignKey(TelegramGroup, on_delete=models.CASCADE, related_name="members")
+    pnfl = models.CharField(max_length=25, null=True, blank=True, unique=False)
+    tg_tel = models.CharField(max_length=15, null=True, blank=True)
+    tel = models.CharField(max_length=15, null=True, blank=True)
+    parent_tel = models.CharField(max_length=15, null=True, blank=True)
+    address = models.CharField(max_length=255, null=True, blank=True)
     is_active = models.BooleanField(default=False)
-    
+
     def __str__(self):
-        return self.fio
-    
+        return self.fio or str(self.telegram_id)
+
     class Meta:
-        verbose_name_plural = "Register"
+        verbose_name = "Register"
+        verbose_name_plural = "Registers"
         db_table = 'register'
 
 class HemisTable(BaseModel):

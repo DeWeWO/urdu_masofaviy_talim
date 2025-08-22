@@ -1,10 +1,9 @@
-from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404
-from rest_framework import viewsets, status
+from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from core.models import TelegramGroup
-from .serializers import TelegramGroupSerializers
+from core.models import TelegramGroup, Register
+from .serializers import TelegramGroupSerializers, RegisterSerializer
 
 @api_view(['POST'])
 def add_telegram_group(request):
@@ -22,3 +21,10 @@ def add_telegram_group(request):
         'errors': serializers.errors
     }, status=status.HTTP_400_BAD_REQUEST)
 
+class RegisterListCreateView(generics.ListCreateAPIView):
+    queryset = Register.objects.all()
+    serializer_class = RegisterSerializer
+
+class RegisterDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Register.objects.all()
+    serializer_class = RegisterSerializer
