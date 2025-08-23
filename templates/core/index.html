@@ -1,6 +1,16 @@
 {% extends  'base.html' %}
+{% load static %}
 
 {% block title %} Asosiy sahifa {% endblock title %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+  <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'plugins/jqvmap/jqvmap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
+  <link rel="stylesheet" href="{% static 'plugins/daterangepicker/daterangepicker.css' %}">
+  <link rel="stylesheet" href="{% static 'plugins/summernote/summernote-bs4.min.css' %}">
+{% endblock %}
 
 
 {% block content %}
@@ -18,3 +28,25 @@
   {% include 'base/down_aside.html' %}
 
 {% endblock content %}
+
+{% block extra_js %}
+  <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'plugins/jquery-ui/jquery-ui.min.js' %}"></script>
+  <script>
+    $.widget.bridge('uibutton', $.ui.button)
+  </script>
+  <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'plugins/chart.js/Chart.min.js' %}"></script>
+  <script src="{% static 'plugins/sparklines/sparkline.js' %}"></script>
+  <script src="{% static 'plugins/jqvmap/jquery.vmap.min.js' %}"></script>
+  <script src="{% static 'plugins/jqvmap/maps/jquery.vmap.usa.js' %}"></script>
+  <script src="{% static 'plugins/jquery-knob/jquery.knob.min.js' %}"></script>
+  <script src="{% static 'plugins/moment/moment.min.js' %}"></script>
+  <script src="{% static 'plugins/daterangepicker/daterangepicker.js' %}"></script>
+  <script src="{% static 'plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+  <script src="{% static 'plugins/summernote/summernote-bs4.min.js' %}"></script>
+  <script src="{% static 'plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js' %}"></script>
+  <script src="{% static 'dist/js/adminlte.js' %}"></script>
+  <script src="{% static 'dist/js/demo.js' %}"></script>
+  <script src="{% static 'dist/js/pages/dashboard.js' %}"></script>
+{% endblock %}
