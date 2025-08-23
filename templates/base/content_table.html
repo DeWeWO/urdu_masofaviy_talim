@@ -31,87 +31,40 @@
               <table id="example1" class="table table-bordered table-striped table-hover">
                 <thead>
                 <tr>
-                  <th>Abiturient_id</th>
-                  <th>Passport raqami</th>
-                  <th>PINFL</th>
+                  <th>№</th>
+                  <th>Telegram id</th>
+                  <th>Username</th>
                   <th>F.I.O</th>
-                  <th>Tug‘ilgan sana</th>
-                  <th>Jinsi</th>
-                  <th>Ta’lim tili</th>
-                  <th>To‘lov shakli tavsiya</th>
-                  <th>Ball</th>
-                  <th>To‘lov shakli</th>
+                  <th>Group ID</th>
+                  <th>PINFL</th>
+                  <th>Tg Tel:</th>
+                  <th>Tel:</th>
+                  <th>Parent Tel:</th>
+                  <th>Manzil</th>
                   <th>Tasdiqlash</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  <td>123456789</td>
-                  <td>AD0000000</td>
-                  <td>1111111177777777</td>
-                  <td>DeWeW</td>
-                  <td>01.01.2000</td>
-                  <td>Male</td>
-                  <td>uzb</td>
-                  <td>Kontrakt</td>
-                  <td>189</td>
-                  <td>Grand</td>
-                  <td style="text-align: center;">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="checkDefault">
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>789456123</td>
-                  <td>AC0000000</td>
-                  <td>1111111177777777</td>
-                  <td>John</td>
-                  <td>01.01.2000</td>
-                  <td>Male</td>
-                  <td>rus</td>
-                  <td>Tavsiya etilmagan</td>
-                  <td>120</td>
-                  <td>Kontrakt</td>
-                  <td style="text-align: center;">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="checkDefault">
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>963852741</td>
-                  <td>AD0000000</td>
-                  <td>1111111177777777</td>
-                  <td>Lorem</td>
-                  <td>01.01.2000</td>
-                  <td>Female</td>
-                  <td>eng</td>
-                  <td>Nogironligi bo'lgan</td>
-                  <td>56</td>
-                  <td>Super</td>
-                  <td style="text-align: center;">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="checkDefault">
-                    </div>
-                  </td>
-                </tr>
+                  {% for reg in reg %}
+                  <tr>
+                    <th>{{ forloop.counter }}</th>
+                    <td>{{ reg.telegram_id }}</td>
+                    <td>{{ reg.username }}</td>
+                    <td>{{ reg.fio }}</td>
+                    <td>{{ reg.register_group }}</td>
+                    <td>{{ reg.pnfl }}</td>
+                    <td>{{ reg.tg_tel }}</td>
+                    <td>{{ reg.tel }}</td>
+                    <td>{{ reg.parent_tel }}</td>
+                    <td>{{ reg.address }}</td>
+                    <td style="text-align: center;">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="check{{ reg.id }}" {% if reg.is_active == True %}checked{% endif %}>
+                      </div>
+                    </td>
+                  </tr>
+                  {% endfor %}
                 </tbody>
-                <tfoot>
-                <tr>
-                  <th>Lorem</th>
-                  <th>Lorem</th>
-                  <th>Lorem</th>
-                  <th>Lorem</th>
-                  <th>Lorem</th>
-                  <th>Lorem</th>
-                  <th>Lorem</th>
-                  <th>Lorem</th>
-                  <th>Lorem</th>
-                  <th>Lorem</th>
-                  <th>Lorem</th>
-                </tr>
-                </tfoot>
               </table>
             </div>
             <!-- /.card-body -->

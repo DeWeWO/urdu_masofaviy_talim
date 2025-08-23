@@ -13,11 +13,9 @@
 
 {% block content %}
 
-  {% include 'base/preloader.html' %}
-
   {% include 'base/navbar.html' %}
 
-  {% include 'base/aside.html' %}
+  {% include 'base/aside.html' with table_active=True check_active=True %}
 
   {% include 'base/content_table.html' %}
 

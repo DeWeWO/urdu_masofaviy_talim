@@ -18,7 +18,7 @@ class TelegramGroupSerializers(serializers.ModelSerializer):
         return group
 
 class RegisterSerializer(serializers.ModelSerializer):
-    group_id = serializers.IntegerField(write_only=True)  # telegram group_id kiritish uchun
+    group_id = serializers.IntegerField(write_only=True)
 
     class Meta:
         model = Register
@@ -32,6 +32,8 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         group_id = validated_data.pop("group_id", None)
+        if "is_active" not in validated_data:
+            validated_data["is_active"] = False
         if group_id:
             try:
                 tg_group = TelegramGroup.objects.get(group_id=group_id)

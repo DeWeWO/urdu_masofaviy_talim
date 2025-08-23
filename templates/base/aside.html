@@ -16,7 +16,7 @@
         <!-- Add icons to the links using the .nav-icon class
               with font-awesome or any other icon font library -->
         <li class="nav-item">
-          <a href="{% url 'main_view' %}" class="nav-link active">
+          <a href="{% url 'main_view' %}" class="nav-link {% if home_active %}active{% endif %}">
             <i class="nav-icon fas fa-th-large"></i>
             <p>
               Home Page
@@ -58,8 +58,8 @@
             </li>
           </ul>
         </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link">
+        <li class="nav-item {% if table_active %}menu-open{% endif %}">
+          <a href="#" class="nav-link {% if table_active %}active{% endif %}">
             <i class="nav-icon fas fa-table"></i>
             <p>
               Tables
@@ -69,7 +69,7 @@
           <ul class="nav nav-treeview">
             <li class="nav-item">
               <a href="{% url 'table_register' %}" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
+                <i class="{% if check_active %}fas fa-dot-circle{% else %}far fa-circle{% endif %} nav-icon"></i>
                 <p>Tasdiqlash</p>
               </a>
             </li>
