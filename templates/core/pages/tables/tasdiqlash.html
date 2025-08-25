@@ -40,17 +40,111 @@
   <script src="{% static 'plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
   <script src="{% static 'plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
 
-  <script>
-    $(function () {
-      var table = $("#example1").DataTable({
-        responsive: true,
-        lengthChange: false,
-        autoWidth: false,
-        buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
-      });
 
-      table.buttons().container()
-           .appendTo('#example1_wrapper .col-md-6:eq(0)');
-    });
-  </script>
+
+<!-- Excel, PDF va CSV uchun kutubxonalar -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+<script>
+$(function () {
+  // Jadval 1 (asosiy)
+  $('#example1').DataTable({
+    paging: false,
+    lengthChange: false,
+    searching: true,
+    ordering: true,
+    info: false,
+    autoWidth: false,
+    responsive: true,
+    scrollY: '290px',
+    scrollX: true,
+    scrollCollapse: true,
+    dom: '<"d-flex justify-content-start mb-2"f>rt'
+  });
+
+  // Jadval 2 va 3
+  $('#example2, #example3').DataTable({
+    paging: false,
+    lengthChange: false,
+    searching: true,
+    ordering: true,
+    info: false,
+    autoWidth: false,
+    responsive: true,
+    scrollY: '300px',
+    scrollX: true,
+    scrollCollapse: true,
+    dom: '<"d-flex justify-content-start mb-2"f>rt'
+  });
+
+  // === Export funksiyalari ===
+
+  // Excel (har jadval alohida sheet)
+  $('#export-excel').on('click', function () {
+    var wb = XLSX.utils.book_new();
+
+    var ws1 = XLSX.utils.table_to_sheet(document.getElementById('example1'));
+    XLSX.utils.book_append_sheet(wb, ws1, "Jadval 1");
+
+    var ws2 = XLSX.utils.table_to_sheet(document.getElementById('example2'));
+    XLSX.utils.book_append_sheet(wb, ws2, "Jadval 2");
+
+    var ws3 = XLSX.utils.table_to_sheet(document.getElementById('example3'));
+    XLSX.utils.book_append_sheet(wb, ws3, "Jadval 3");
+
+    XLSX.writeFile(wb, "barcha_jadvallar.xlsx");
+  });
+
+  // PDF (har jadval alohida sahifa)
+  $('#export-pdf').on('click', function () {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Jadval 1
+    doc.text("Jadval 1", 14, 15);
+    doc.autoTable({ html: '#example1', startY: 20 });
+
+    // Jadval 2
+    doc.addPage();
+    doc.text("Jadval 2", 14, 15);
+    doc.autoTable({ html: '#example2', startY: 20 });
+
+    // Jadval 3
+    doc.addPage();
+    doc.text("Jadval 3", 14, 15);
+    doc.autoTable({ html: '#example3', startY: 20 });
+
+    doc.save("barcha_jadvallar.pdf");
+  });
+
+  // CSV (uchala jadval ketma-ket yoziladi)
+  $('#export-csv').on('click', function () {
+    function tableToCSV(tableId) {
+      let csv = [];
+      let rows = document.querySelectorAll(`#${tableId} tr`);
+      rows.forEach(row => {
+        let cols = row.querySelectorAll('td, th');
+        let rowData = [];
+        cols.forEach(col => rowData.push('"' + col.innerText.replace(/"/g, '""') + '"'));
+        csv.push(rowData.join(","));
+      });
+      return csv.join("\n");
+    }
+
+    let csvContent = "Jadval 1\n" + tableToCSV("example1") +
+                     "\n\n--- Jadval 2 ---\n" + tableToCSV("example2") +
+                     "\n\n--- Jadval 3 ---\n" + tableToCSV("example3");
+
+    let blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    let link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "barcha_jadvallar.csv";
+    link.click();
+  });
+});
+</script>
+
+
 {% endblock %}
