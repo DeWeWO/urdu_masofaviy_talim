@@ -25,7 +25,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'telegram_id', 'username', 'fio',
             'group_id', 'register_group', 'pnfl', 'tg_tel',
-            'tel', 'parent_tel', 'address', 'is_active',
+            'tel', 'parent_tel', 'address', 'is_active', 'is_teacher',
             'created', 'updated'
         ]
         read_only_fields = ['register_group', 'created', 'updated']
