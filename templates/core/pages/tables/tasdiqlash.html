@@ -47,6 +47,30 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.student-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                const registerId = this.id.split('_')[1];
+                document.querySelector(`#teacher_${registerId}`).checked = false;
+            }
+        });
+    });
+    
+    document.querySelectorAll('.teacher-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                const registerId = this.id.split('_')[1];
+                document.querySelector(`#student_${registerId}`).checked = false;
+            }
+        });
+    });
+});
+</script>
+
+
 <script>
 $(function () {
   // Jadval 1 (asosiy)
@@ -73,7 +97,7 @@ $(function () {
     info: false,
     autoWidth: false,
     responsive: true,
-    scrollY: '300px',
+    scrollY: '240px',
     scrollX: true,
     scrollCollapse: true,
     dom: '<"d-flex justify-content-start mb-2"f>rt'

@@ -31,7 +31,7 @@
 
           <!-- Jadval 1 -->
           <div class="card">
-            <div class="card-header"><h3 class="card-title">Jadval 1</h3></div>
+            <div class="card-header"><h3 class="card-title font-weight-bold">Tasdiqlangan Talabalar</h3></div>
             <div class="card-body">
               <div style="max-height:400px;overflow-y:auto;">
                 <table id="example1" class="table table-bordered table-striped table-hover">
@@ -47,27 +47,21 @@
                     <th>Tel:</th>
                     <th>Parent Tel:</th>
                     <th>Manzil</th>
-                    <th>Tasdiqlash</th>
                   </tr>
                   </thead>
                   <tbody>
-                    {% for reg in reg %}
+                    {% for reg_t in reg_true %}
                     <tr>
                       <th>{{ forloop.counter }}</th>
-                      <td>{{ reg.telegram_id }}</td>
-                      <td>{{ reg.username }}</td>
-                      <td>{{ reg.fio }}</td>
-                      <td>{{ reg.register_group }}</td>
-                      <td>{{ reg.pnfl }}</td>
-                      <td>{{ reg.tg_tel }}</td>
-                      <td>{{ reg.tel }}</td>
-                      <td>{{ reg.parent_tel }}</td>
-                      <td>{{ reg.address }}</td>
-                      <td style="text-align:center;">
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="check{{ reg.id }}" {% if reg.is_active %}checked{% endif %}>
-                        </div>
-                      </td>
+                      <td>{{ reg_t.telegram_id }}</td>
+                      <td>{{ reg_t.username }}</td>
+                      <td>{{ reg_t.fio }}</td>
+                      <td>{{ reg_t.register_group }}</td>
+                      <td>{{ reg_t.pnfl }}</td>
+                      <td>{{ reg_t.tg_tel }}</td>
+                      <td>{{ reg_t.tel }}</td>
+                      <td>{{ reg_t.parent_tel }}</td>
+                      <td>{{ reg_t.address }}</td>
                     </tr>
                     {% endfor %}
                   </tbody>
@@ -78,17 +72,39 @@
 
           <!-- Jadval 2 -->
           <div class="card mt-4">
-            <div class="card-header"><h3 class="card-title">Jadval 2</h3></div>
+            <div class="card-header"><h3 class="card-title font-weight-bold">O'qituvchilar</h3></div>
             <div class="card-body">
               <div style="max-height:400px;overflow-y:auto;">
                 <table id="example2" class="table table-bordered table-striped table-hover">
                   <thead>
-                    <tr><th>№</th><th>Column A</th><th>Column B</th><th>Column C</th></tr>
+                  <tr>
+                    <th>№</th>
+                    <th>Telegram id</th>
+                    <th>Username</th>
+                    <th>F.I.O</th>
+                    <th>Group ID</th>
+                    <th>PINFL</th>
+                    <th>Tg Tel:</th>
+                    <th>Tel:</th>
+                    <th>Parent Tel:</th>
+                    <th>Manzil</th>
+                  </tr>
                   </thead>
                   <tbody>
-                    <tr><td>1</td><td>A1</td><td>B1</td><td>C1</td></tr>
-                    <tr><td>2</td><td>A2</td><td>B2</td><td>C2</td></tr>
-                    <tr><td>3</td><td>A3</td><td>B3</td><td>C3</td></tr>
+                    {% for teach in teacher %}
+                    <tr>
+                      <th>{{ forloop.counter }}</th>
+                      <td>{{ teach.telegram_id }}</td>
+                      <td>{{ teach.username }}</td>
+                      <td>{{ teach.fio }}</td>
+                      <td>{{ teach.register_group }}</td>
+                      <td>{{ teach.pnfl }}</td>
+                      <td>{{ teach.tg_tel }}</td>
+                      <td>{{ teach.tel }}</td>
+                      <td>{{ teach.parent_tel }}</td>
+                      <td>{{ teach.address }}</td>
+                    </tr>
+                    {% endfor %}
                   </tbody>
                 </table>
               </div>
@@ -97,18 +113,67 @@
 
           <!-- Jadval 3 -->
           <div class="card mt-4">
-            <div class="card-header"><h3 class="card-title">Jadval 3</h3></div>
+            <div class="card-header"><h3 class="card-title font-weight-bold">Tasdiqlanmagan Talabalar</h3></div>
             <div class="card-body">
               <div style="max-height:400px;overflow-y:auto;">
+                <form method="post" action="{% url 'bulk_update_register' %}">
+                {% csrf_token %}
                 <table id="example3" class="table table-bordered table-striped table-hover">
                   <thead>
-                    <tr><th>№</th><th>Foo</th><th>Bar</th><th>Baz</th></tr>
+                  <tr>
+                    <th>№</th>
+                    <th>Telegram id</th>
+                    <th>Username</th>
+                    <th>F.I.O</th>
+                    <th>Group ID</th>
+                    <th>PINFL</th>
+                    <th>Tg Tel:</th>
+                    <th>Tel:</th>
+                    <th>Parent Tel:</th>
+                    <th>Manzil</th>
+                    <th>Talaba</th>
+                    <th>O'qituvchi</th>
+                  </tr>
                   </thead>
                   <tbody>
-                    <tr><td>1</td><td>Foo1</td><td>Bar1</td><td>Baz1</td></tr>
-                    <tr><td>2</td><td>Foo2</td><td>Bar2</td><td>Baz2</td></tr>
+                    {% for reg_f in reg_false %}
+                    <tr>
+                      <th>{{ forloop.counter }}</th>
+                      <td>{{ reg_f.telegram_id }}</td>
+                      <td>{{ reg_f.username }}</td>
+                      <td>{{ reg_f.fio }}</td>
+                      <td>{{ reg_f.register_group }}</td>
+                      <td>{{ reg_f.pnfl }}</td>
+                      <td>{{ reg_f.tg_tel }}</td>
+                      <td>{{ reg_f.tel }}</td>
+                      <td>{{ reg_f.parent_tel }}</td>
+                      <td>{{ reg_f.address }}</td>
+                      <td style="text-align:center;">
+                        <div class="form-check">
+                          <input class="form-check-input student-checkbox" 
+                                type="checkbox" 
+                                name="active_students" 
+                                value="{{ reg_f.id }}" 
+                                id="student_{{ reg_f.id }}">
+                        </div>
+                      </td>
+                      <td style="text-align:center;">
+                        <div class="form-check">
+                          <input class="form-check-input teacher-checkbox" 
+                                type="checkbox" 
+                                name="teachers" 
+                                value="{{ reg_f.id }}" 
+                                id="teacher_{{ reg_f.id }}">
+                        </div>
+                      </td>
+                    </tr>
+                    {% endfor %}
                   </tbody>
                 </table>
+                  <div class="mt-3 text-right">
+                    <button type="submit" class="btn btn-success">Saqlash</button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
