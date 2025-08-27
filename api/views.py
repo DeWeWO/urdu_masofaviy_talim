@@ -26,5 +26,8 @@ class RegisterListCreateView(generics.ListCreateAPIView):
     serializer_class = RegisterSerializer
 
 class RegisterDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Register.objects.all()
     serializer_class = RegisterSerializer
+    lookup_field = 'telegram_id'
+    
+    def get_queryset(self):
+        return Register.objects.all()

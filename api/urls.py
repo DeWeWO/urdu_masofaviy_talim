@@ -4,5 +4,5 @@ from .views import add_telegram_group, RegisterListCreateView, RegisterDetailVie
 urlpatterns = [
     path('telegram/group/add/', add_telegram_group, name='add_telegram_group'),
     path('register/', RegisterListCreateView.as_view(), name='register-list-create'),
-    path('register/<int:pk>/', RegisterDetailView.as_view(), name='register-detail'),
+    path('register/<int:telegram_id>/', RegisterDetailView.as_view(), name='register-detail'),
 ]
