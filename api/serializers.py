@@ -41,3 +41,39 @@ class RegisterSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError({"group_id": "Bunday Telegram group mavjud emas"})
             validated_data["register_group"] = tg_group
         return super().create(validated_data)
+
+class RegisterBasicSerializer(serializers.ModelSerializer):
+    """Faqat telegram_id va pnfl uchun"""
+    class Meta:
+        model = Register
+        fields = ['telegram_id', 'pnfl']
+
+class RegisterStatusSerializer(serializers.ModelSerializer):
+    """Status tekshirish uchun"""
+    class Meta:
+        model = Register
+        fields = ['telegram_id', 'username', 'fio', 'pnfl', 'is_active', 'is_teacher']
+
+class RegisterDetailSerializer(serializers.ModelSerializer):
+    """To'liq ma'lumotlar uchun"""
+    register_group_name = serializers.CharField(source='register_group.name', read_only=True)
+    
+    class Meta:
+        model = Register
+        fields = [
+            'id',
+            'telegram_id',
+            'username',
+            'fio',
+            'register_group',
+            'register_group_name',
+            'pnfl', 
+            'tg_tel',
+            'tel',
+            'parent_tel',
+            'address',
+            'is_active',
+        ]
+        extra_kwargs = {
+            'telegram_id': {'read_only': True},
+        }
