@@ -38,9 +38,9 @@ class Register(BaseModel):
         return self.fio or str(self.telegram_id)
 
     class Meta:
+        db_table = 'register'
         verbose_name = "Register"
         verbose_name_plural = "Registers"
-        db_table = 'register'
 
 class HemisTable(BaseModel):
     hemis_id = models.BigIntegerField(unique=True, db_index=True)

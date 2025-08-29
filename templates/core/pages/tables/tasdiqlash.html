@@ -81,15 +81,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const messageResult = document.getElementById('messageResult');
     const resultContent = document.getElementById('resultContent');
 
-    // Checkbox'lar uchun mutual exclusive qilish
+    // --- CHECKBOXLAR (student/teacher) bir vaqtning o'zida faollashmasligi uchun ---
     document.querySelectorAll('.student-checkbox').forEach(checkbox => {
         checkbox.addEventListener('change', function() {
             if (this.checked) {
                 const rowId = this.value;
                 const teacherCheckbox = document.getElementById(`teacher_${rowId}`);
-                if (teacherCheckbox) {
-                    teacherCheckbox.checked = false;
-                }
+                if (teacherCheckbox) teacherCheckbox.checked = false;
             }
         });
     });
@@ -99,14 +97,12 @@ document.addEventListener('DOMContentLoaded', function() {
             if (this.checked) {
                 const rowId = this.value;
                 const studentCheckbox = document.getElementById(`student_${rowId}`);
-                if (studentCheckbox) {
-                    studentCheckbox.checked = false;
-                }
+                if (studentCheckbox) studentCheckbox.checked = false;
             }
         });
     });
 
-                    // Xabar yuborish formasi
+    // --- Xabar yuborish formasi ---
     if (messageForm) {
         messageForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -115,23 +111,22 @@ document.addEventListener('DOMContentLoaded', function() {
             const target = formData.get('target');
             const method = formData.get('method');
             const message = formData.get('message');
-            
+
+            // Validation
             if (!target || !method || !message.trim()) {
-                alert('Barcha maydonlarni to\'ldiring');
+                alert('⚠️ Barcha maydonlarni to‘ldiring!');
                 return;
             }
 
-            // Method bo'yicha warning ko'rsatish
-            if (method === 'group') {
-                if (!confirm('Guruh chatiga xabar yuboriladi. Davom etasizmi?')) {
-                    return;
-                }
+            // Ogohlantirish (faqat guruh uchun)
+            if (method === 'group' && !confirm('📢 Guruh chatiga xabar yuboriladi. Davom etasizmi?')) {
+                return;
             }
 
-            // Loading ko'rsatish
+            // Loaderni ko‘rsatish
             loadingSpinner.style.display = 'block';
             messageResult.style.display = 'none';
-            
+
             // AJAX orqali yuborish
             fetch('/send-message/', {
                 method: 'POST',
@@ -140,50 +135,47 @@ document.addEventListener('DOMContentLoaded', function() {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             })
-            .then(response => response.json())
-            .then(data => {
+            .then(async response => {
+                const data = await response.json();
                 loadingSpinner.style.display = 'none';
-                
-                if (data.error) {
+
+                if (!response.ok || data.error) {
                     resultContent.innerHTML = `
                         <div class="text-danger">
-                            <strong>Xatolik:</strong> ${data.error}
+                            <strong>❌ Xatolik:</strong> ${data.error || 'Server xatosi yuz berdi'}
                         </div>
                     `;
                 } else {
                     let resultHtml = `
                         <div class="text-success">
-                            <strong>Muvaffaqiyatli yuborildi:</strong> ${data.sent} ta<br>
-                            <strong>Muvaffaqiyatsiz:</strong> ${data.failed} ta<br>
-                            <strong>Jami:</strong> ${data.total} ta<br>
-                            <strong>Usul:</strong> ${data.method}
+                            <strong>✅ Muvaffaqiyatli yuborildi:</strong> ${data.sent} ta<br>
+                            <strong>❌ Muvaffaqiyatsiz:</strong> ${data.failed} ta<br>
+                            <strong>📊 Jami:</strong> ${data.total} ta<br>
+                            <strong>🔄 Usul:</strong> ${data.method}
                         </div>
                     `;
                     
                     if (data.errors && data.errors.length > 0) {
                         resultHtml += `
                             <div class="text-warning mt-2">
-                                <strong>Xatolar:</strong><br>
+                                <strong>⚠️ Ayrim xatolar:</strong><br>
                                 <ul class="mb-0">
                                     ${data.errors.map(error => `<li>${error}</li>`).join('')}
                                 </ul>
                             </div>
                         `;
                     }
-                    
                     resultContent.innerHTML = resultHtml;
                 }
-                
+
                 messageResult.style.display = 'block';
-                
-                // Formani tozalash
-                messageForm.reset();
+                messageForm.reset(); // Formani tozalash
             })
             .catch(error => {
                 loadingSpinner.style.display = 'none';
                 resultContent.innerHTML = `
                     <div class="text-danger">
-                        <strong>Xatolik:</strong> ${error.message}
+                        <strong>❌ Xatolik:</strong> ${error.message}
                     </div>
                 `;
                 messageResult.style.display = 'block';
