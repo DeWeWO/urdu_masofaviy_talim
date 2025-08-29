@@ -8,6 +8,30 @@
   <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
   <link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
   <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+  <style>
+  .card-header {
+      background-color: #f4f4f4;
+      border-bottom: 1px solid #ddd;
+  }
+
+  .table-hover tbody tr:hover {
+      background-color: #f5f5f5;
+  }
+
+  #messageResult {
+      border-radius: 5px;
+  }
+
+  .spinner-border {
+      width: 3rem;
+      height: 3rem;
+  }
+
+  .form-check-input:checked {
+      background-color: #007bff;
+      border-color: #007bff;
+  }
+  </style>
 {% endblock %}
 
 
@@ -46,6 +70,129 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+
+
+<!-- JavaScript for send message -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const messageForm = document.getElementById('messageForm');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const messageResult = document.getElementById('messageResult');
+    const resultContent = document.getElementById('resultContent');
+
+    // Checkbox'lar uchun mutual exclusive qilish
+    document.querySelectorAll('.student-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                const rowId = this.value;
+                const teacherCheckbox = document.getElementById(`teacher_${rowId}`);
+                if (teacherCheckbox) {
+                    teacherCheckbox.checked = false;
+                }
+            }
+        });
+    });
+
+    document.querySelectorAll('.teacher-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                const rowId = this.value;
+                const studentCheckbox = document.getElementById(`student_${rowId}`);
+                if (studentCheckbox) {
+                    studentCheckbox.checked = false;
+                }
+            }
+        });
+    });
+
+                    // Xabar yuborish formasi
+    if (messageForm) {
+        messageForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(messageForm);
+            const target = formData.get('target');
+            const method = formData.get('method');
+            const message = formData.get('message');
+            
+            if (!target || !method || !message.trim()) {
+                alert('Barcha maydonlarni to\'ldiring');
+                return;
+            }
+
+            // Method bo'yicha warning ko'rsatish
+            if (method === 'group') {
+                if (!confirm('Guruh chatiga xabar yuboriladi. Davom etasizmi?')) {
+                    return;
+                }
+            }
+
+            // Loading ko'rsatish
+            loadingSpinner.style.display = 'block';
+            messageResult.style.display = 'none';
+            
+            // AJAX orqali yuborish
+            fetch('/send-message/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                loadingSpinner.style.display = 'none';
+                
+                if (data.error) {
+                    resultContent.innerHTML = `
+                        <div class="text-danger">
+                            <strong>Xatolik:</strong> ${data.error}
+                        </div>
+                    `;
+                } else {
+                    let resultHtml = `
+                        <div class="text-success">
+                            <strong>Muvaffaqiyatli yuborildi:</strong> ${data.sent} ta<br>
+                            <strong>Muvaffaqiyatsiz:</strong> ${data.failed} ta<br>
+                            <strong>Jami:</strong> ${data.total} ta<br>
+                            <strong>Usul:</strong> ${data.method}
+                        </div>
+                    `;
+                    
+                    if (data.errors && data.errors.length > 0) {
+                        resultHtml += `
+                            <div class="text-warning mt-2">
+                                <strong>Xatolar:</strong><br>
+                                <ul class="mb-0">
+                                    ${data.errors.map(error => `<li>${error}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    }
+                    
+                    resultContent.innerHTML = resultHtml;
+                }
+                
+                messageResult.style.display = 'block';
+                
+                // Formani tozalash
+                messageForm.reset();
+            })
+            .catch(error => {
+                loadingSpinner.style.display = 'none';
+                resultContent.innerHTML = `
+                    <div class="text-danger">
+                        <strong>Xatolik:</strong> ${error.message}
+                    </div>
+                `;
+                messageResult.style.display = 'block';
+            });
+        });
+    }
+});
+</script>
+
 
 
 <script>
