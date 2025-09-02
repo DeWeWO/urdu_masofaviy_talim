@@ -26,6 +26,7 @@ class Register(BaseModel):
     username = models.CharField(max_length=100, null=True, blank=True)
     fio = models.CharField(max_length=255, null=True, blank=True)
     register_group = models.ForeignKey(TelegramGroup, on_delete=models.CASCADE, related_name="members")
+    hemis_id = models.BigIntegerField(unique=True, db_index=True)
     pnfl = models.CharField(max_length=25, null=True, blank=True, unique=False)
     tg_tel = models.CharField(max_length=15, null=True, blank=True)
     tel = models.CharField(max_length=15, null=True, blank=True)
@@ -43,16 +44,25 @@ class Register(BaseModel):
         verbose_name_plural = "Registers"
 
 class HemisTable(BaseModel):
+    register = models.OneToOneField(
+        "Register",
+        on_delete=models.SET_NULL,
+        null=True, blank=True,
+        related_name='hemis_data'
+    )
     hemis_id = models.BigIntegerField(unique=True, db_index=True)
-    telegram_id = models.OneToOneField(Register, on_delete=models.CASCADE, primary_key=True)
     fio = models.CharField(max_length=255)
-    course = models.IntegerField()
-    major = models.CharField(max_length=255)
-    student_group = models.CharField(max_length=100)
+    born = models.DateField()
+    passport = models.CharField(max_length=9)
+    pnfl = models.CharField(max_length=14, db_index=True)
+    course = models.CharField(max_length=100)
+    student_group = models.CharField(max_length=255)
+    in_group = models.BooleanField(default=False)
     
     def __str__(self):
-        return self.fio
+        return f"{self.fio} ({self.hemis_id})"
     
     class Meta:
-        verbose_name_plural = "Hemis Table"
         db_table = 'hemis_table'
+        verbose_name = "Hemis Record"
+        verbose_name_plural = "Hemis Table"
