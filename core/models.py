@@ -66,3 +66,4 @@ class HemisTable(BaseModel):
         db_table = 'hemis_table'
         verbose_name = "Hemis Record"
         verbose_name_plural = "Hemis Table"
+
