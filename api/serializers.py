@@ -19,12 +19,13 @@ class TelegramGroupSerializers(serializers.ModelSerializer):
 
 class RegisterSerializer(serializers.ModelSerializer):
     group_id = serializers.IntegerField(write_only=True)
+    hemis_id = serializers.IntegerField(required=False, allow_null=True)
 
     class Meta:
         model = Register
         fields = [
             'id', 'telegram_id', 'username', 'fio',
-            'group_id', 'register_group', 'pnfl', 'tg_tel',
+            'group_id', 'register_group', 'hemis_id', 'pnfl', 'tg_tel',
             'tel', 'parent_tel', 'address', 'is_active', 'is_teacher',
             'created', 'updated'
         ]

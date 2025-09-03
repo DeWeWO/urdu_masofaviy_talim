@@ -17,10 +17,15 @@ class RegisterAdmin(admin.ModelAdmin):
 
 @admin.register(HemisTable)
 class HemisTableAdmin(admin.ModelAdmin):
-    list_display = ('hemis_id', 'telegram_id', 'fio', 'course', 'major', 'student_group', 'created', 'updated')
-    list_filter = ('course', 'major', 'student_group')
-    search_fields = ('fio', 'major', 'student_group')
+    list_display = ('hemis_id', 'fio', 'born', 'passport', 'pnfl', 'course', 'student_group', 'in_group', 'get_register', 'created', 'updated')
+    list_filter = ('course', 'student_group', 'in_group', 'born')
+    search_fields = ('fio', 'student_group', 'passport', 'pnfl')
     readonly_fields = ('created', 'updated')
+    ordering = ('-created',)
+    
+    def get_register(self, obj):
+        return obj.register if obj.register else "Belgilanmagan"
+    get_register.short_description = "Register"
 
 admin.site.site_header = "Masofaviy Ta'lim Admin Panel"
 admin.site.site_title = "Masofaviy Ta'lim Admin"

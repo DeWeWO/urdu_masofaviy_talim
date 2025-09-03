@@ -26,7 +26,7 @@ class Register(BaseModel):
     username = models.CharField(max_length=100, null=True, blank=True)
     fio = models.CharField(max_length=255, null=True, blank=True)
     register_group = models.ForeignKey(TelegramGroup, on_delete=models.CASCADE, related_name="members")
-    hemis_id = models.BigIntegerField(unique=True, db_index=True)
+    hemis_id = models.BigIntegerField(null=True, blank=True, unique=True, db_index=True)
     pnfl = models.CharField(max_length=25, null=True, blank=True, unique=False)
     tg_tel = models.CharField(max_length=15, null=True, blank=True)
     tel = models.CharField(max_length=15, null=True, blank=True)
@@ -50,9 +50,9 @@ class HemisTable(BaseModel):
         null=True, blank=True,
         related_name='hemis_data'
     )
-    hemis_id = models.BigIntegerField(unique=True, db_index=True)
+    hemis_id = models.BigIntegerField(null=True, blank=True, unique=True, db_index=True)
     fio = models.CharField(max_length=255)
-    born = models.DateField()
+    born = models.DateField(null=True, blank=True)
     passport = models.CharField(max_length=9)
     pnfl = models.CharField(max_length=14, db_index=True)
     course = models.CharField(max_length=100)

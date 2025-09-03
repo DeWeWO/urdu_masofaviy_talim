@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Register, TelegramGroup
+from core.models import Register, TelegramGroup
 from environs import Env
 
 # Matplotlib sozlamalari
