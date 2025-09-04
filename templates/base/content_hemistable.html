@@ -1,0 +1,248 @@
+{% load static %}
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Hemis Talabalar Ma'lumotlari</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">Hemis Talabalar</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <!-- Statistika kartochkalari -->
+      <div class="row mb-3">
+        <div class="col-lg-3 col-6">
+          <div class="small-box bg-info">
+            <div class="inner">
+              <h3>{{ stats.total_count }}</h3>
+              <p>Jami talabalar</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-person-stalker"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-6">
+          <div class="small-box bg-success">
+            <div class="inner">
+              <h3>{{ stats.registered_count }}</h3>
+              <p>Ro'yxatga olingan</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-checkmark-round"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-6">
+          <div class="small-box bg-warning">
+            <div class="inner">
+              <h3>{{ stats.in_group_count }}</h3>
+              <p>Guruhda</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-chatbubbles"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-6">
+          <div class="small-box bg-danger">
+            <div class="inner">
+              <h3>{{ stats.unregistered_count }}</h3>
+              <p>Ro'yxatga olinmagan</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-close-round"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Excel yuklash kartasi -->
+      <div class="row mb-3">
+        <div class="col-12">
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Excel Fayl Yuklash</h3>
+            </div>
+            <div class="card-body">
+              <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="input-group">
+                  <div class="custom-file">
+                    <input type="file" name="file" class="custom-file-input" id="excelFile" accept=".xlsx, .xls" required>
+                    <label class="custom-file-label" for="excelFile">Excel fayl tanlang...</label>
+                  </div>
+                  <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">
+                      <i class="fas fa-upload"></i> Yuklash
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      {% if messages %}
+        <div class="row">
+          <div class="col-12">
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Asosiy jadval -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Hemis Talabalar Jadvali</h3>
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body" style="overflow-x: auto; width: 100%;">
+              <table id="example1" class="table table-bordered table-striped table-hover">
+                <thead>
+                <tr>
+                  <th>HEMIS ID</th>
+                  <th>FIO</th>
+                  <th>Tug'ilgan sana</th>
+                  <th>Passport</th>
+                  <th>PNFL</th>
+                  <th>Kurs</th>
+                  <th>Guruh</th>
+                  <th>Telegram ID</th>
+                  <th>Username</th>
+                  <th>TG Telefon</th>
+                  <th>Shaxsiy Tel.</th>
+                  <th>Ota-Ona Tel.</th>
+                  <th>Manzil</th>
+                  <th>TG Guruhlari</th>
+                  <th>Holat</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in data %}
+                <tr>
+                  <td>{{ item.hemis_id|default:"-" }}</td>
+                  <td>
+                    <strong>{{ item.fio|default:"-" }}</strong>
+                    {% if item.register %}
+                      <br><small class="text-success">Ro'yxatga olingan</small>
+                    {% endif %}
+                  </td>
+                  <td>{{ item.born|default:"-" }}</td>
+                  <td>{{ item.passport|default:"-" }}</td>
+                  <td>{{ item.pnfl|default:"-" }}</td>
+                  <td>{{ item.course|default:"-" }}</td>
+                  <td>{{ item.student_group|default:"-" }}</td>
+                  <td>
+                    {% if item.register %}
+                      {{ item.register.telegram_id|default:"-" }}
+                    {% else %}
+                      <span class="text-muted">-</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if item.register and item.register.username %}
+                      @{{ item.register.username }}
+                    {% else %}
+                      <span class="text-muted">-</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if item.register %}
+                      {{ item.register.tg_tel|default:"-" }}
+                    {% else %}
+                      <span class="text-muted">-</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if item.register %}
+                      {{ item.register.tel|default:"-" }}
+                    {% else %}
+                      <span class="text-muted">-</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if item.register %}
+                      {{ item.register.parent_tel|default:"-" }}
+                    {% else %}
+                      <span class="text-muted">-</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if item.register %}
+                      {{ item.register.address|default:"-" }}
+                    {% else %}
+                      <span class="text-muted">-</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if item.telegram_groups.count > 0 %}
+                      <span class="badge badge-success">{{ item.telegram_groups.count }} ta</span>
+                      <br>
+                      {% for group in item.telegram_groups.all|slice:":2" %}
+                        <small class="text-muted">{{ group.group_name|default:group.group_id }}</small>
+                        {% if not forloop.last %}, {% endif %}
+                      {% endfor %}
+                      {% if item.telegram_groups.count > 2 %}
+                        <br><small class="text-info">+{{ item.telegram_groups.count|add:"-2" }} ta</small>
+                      {% endif %}
+                    {% else %}
+                      <span class="badge badge-secondary">Guruhsiz</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if item.register %}
+                      {% if item.register.is_active %}
+                        <span class="badge badge-success">Faol</span>
+                      {% else %}
+                        <span class="badge badge-warning">Nofaol</span>
+                      {% endif %}
+                      {% if item.register.is_teacher %}
+                        <br><span class="badge badge-info">O'qituvchi</span>
+                      {% endif %}
+                    {% else %}
+                      <span class="badge badge-danger">Ro'yxatdan o'tmagan</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="15" class="text-center">
+                    <h5 class="text-muted">Ma'lumot topilmadi</h5>
+                    <p>Hemis ma'lumotlari uchun Excel fayl yuklang</p>
+                  </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

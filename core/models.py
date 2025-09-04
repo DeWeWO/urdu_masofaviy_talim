@@ -27,7 +27,7 @@ class Register(BaseModel):
     fio = models.CharField(max_length=255, null=True, blank=True)
     register_group = models.ForeignKey(TelegramGroup, on_delete=models.CASCADE, related_name="members")
     hemis_id = models.BigIntegerField(null=True, blank=True, unique=True, db_index=True)
-    pnfl = models.CharField(max_length=25, null=True, blank=True, unique=False)
+    pnfl = models.CharField(max_length=14, null=True, blank=True, unique=True)
     tg_tel = models.CharField(max_length=15, null=True, blank=True)
     tel = models.CharField(max_length=15, null=True, blank=True)
     parent_tel = models.CharField(max_length=15, null=True, blank=True)
@@ -50,6 +50,11 @@ class HemisTable(BaseModel):
         null=True, blank=True,
         related_name='hemis_data'
     )
+    telegram_groups = models.ManyToManyField(
+        TelegramGroup,
+        blank=True,
+        related_name='hemis_members'
+    )
     hemis_id = models.BigIntegerField(null=True, blank=True, unique=True, db_index=True)
     fio = models.CharField(max_length=255)
     born = models.DateField(null=True, blank=True)
@@ -57,7 +62,59 @@ class HemisTable(BaseModel):
     pnfl = models.CharField(max_length=14, db_index=True)
     course = models.CharField(max_length=100)
     student_group = models.CharField(max_length=255)
-    in_group = models.BooleanField(default=False)
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        
+        self._link_with_register()
+    
+    def _link_with_register(self):
+        if not self.hemis_id or not self.pnfl:
+            return
+            
+        try:
+            # Mos keluvchi Register ni topish
+            register = Register.objects.get(
+                hemis_id=self.hemis_id,
+                pnfl=self.pnfl
+            )
+            
+            # Register bilan bog'lash
+            if not self.register:
+                self.register = register
+                # register maydonini yangilash uchun save chaqirilmaydi
+                HemisTable.objects.filter(id=self.id).update(register=register)
+                
+                # Register ni faollashtirish
+                if not register.is_active:
+                    register.is_active = True
+                    register.save()
+            
+            # Telegram guruhiga qo'shish
+            if register.register_group and not self.telegram_groups.filter(id=register.register_group.id).exists():
+                self.telegram_groups.add(register.register_group)
+                
+        except Register.DoesNotExist:
+            # Mos keluvchi Register topilmadi
+            pass
+        except Register.MultipleObjectsReturned:
+            # Bir nechta mos keluvchi Register topildi
+            # Birinchisini olish
+            register = Register.objects.filter(
+                hemis_id=self.hemis_id,
+                pnfl=self.pnfl
+            ).first()
+            
+            if register and not self.register:
+                self.register = register
+                HemisTable.objects.filter(id=self.id).update(register=register)
+                
+                if not register.is_active:
+                    register.is_active = True
+                    register.save()
+                    
+                if register.register_group and not self.telegram_groups.filter(id=register.register_group.id).exists():
+                    self.telegram_groups.add(register.register_group)
     
     def __str__(self):
         return f"{self.fio} ({self.hemis_id})"

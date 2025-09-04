@@ -69,17 +69,17 @@
           <ul class="nav nav-treeview">
             <li class="nav-item">
               <a href="{% url 'table_register' %}" class="nav-link">
-                <i class="{% if check_active %}fas fa-dot-circle{% else %}far fa-circle{% endif %} nav-icon"></i>
+                <i class="{% if group_active %}fas fa-dot-circle{% else %}far fa-circle{% endif %} nav-icon"></i>
                 <p>Guruhlar</p>
               </a>
             </li>
-            <!-- <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Tasdiqlangan</p>
+            <li class="nav-item">
+              <a href="{% url 'hemistable_view' %}" class="nav-link">
+                <i class="{% if hemis_active %}fas fa-dot-circle{% else %}far fa-circle{% endif %} nav-icon"></i>
+                <p>Hemis Table</p>
               </a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Telegram guruh nzorati</p>

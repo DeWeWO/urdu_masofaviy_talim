@@ -1,0 +1,77 @@
+{% extends  'base.html' %}
+{% load static %}
+
+{% block title %} Hemis Table {% endblock title %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+  <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+  <link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+  <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+  
+{% endblock %}
+
+
+{% block content %}
+
+  {% include 'base/navbar.html' %}
+
+  {% include 'base/aside.html' with table_active=True hemis_active=True %}
+
+  {% include 'base/content_hemistable.html' %}
+
+  {% include 'base/footer.html' %}
+
+  {% include 'base/down_aside.html' %}
+
+{% endblock content %}
+
+
+{% block extra_js %}
+  <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+  <script src="{% static 'plugins/jszip/jszip.min.js' %}"></script>
+  <script src="{% static 'plugins/pdfmake/pdfmake.min.js' %}"></script>
+  <script src="{% static 'plugins/pdfmake/vfs_fonts.js' %}"></script>
+  <script src="{% static 'plugins/datatables-buttons/js/buttons.html5.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+
+  <script src="{% static 'dist/js/demo.js' %}"></script>
+
+
+  <script>
+  $(document).ready(function() {
+    // DataTable sozlash
+    $('#example1').DataTable({
+      "responsive": true,
+      "lengthChange": true,
+      "autoWidth": false,
+      "pageLength": 25,
+      "order": [[ 0, "desc" ]],
+      "language": {
+        "search": "Qidirish:",
+        "lengthMenu": "_MENU_ ta yozuv ko'rsatish",
+        "info": "_START_ dan _END_ gacha (_TOTAL_ dan)",
+        "infoEmpty": "Ma'lumot yo'q",
+        "paginate": {
+          "first": "Birinchi",
+          "last": "Oxirgi",
+          "next": "Keyingi",
+          "previous": "Oldingi"
+        }
+      }
+    });
+
+    // File input label update
+    $('.custom-file-input').on('change', function() {
+      var fileName = $(this).val().split('\\').pop();
+      $(this).siblings('.custom-file-label').html(fileName);
+    });
+  });
+  </script>
+{% endblock %}
