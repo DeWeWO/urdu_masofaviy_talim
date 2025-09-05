@@ -124,119 +124,143 @@
             <div class="card-body" style="overflow-x: auto; width: 100%;">
               <table id="example1" class="table table-bordered table-striped table-hover">
                 <thead>
-                <tr>
-                  <th>HEMIS ID</th>
-                  <th>FIO</th>
-                  <th>Tug'ilgan sana</th>
-                  <th>Passport</th>
-                  <th>PNFL</th>
-                  <th>Kurs</th>
-                  <th>Guruh</th>
-                  <th>Telegram ID</th>
-                  <th>Username</th>
-                  <th>TG Telefon</th>
-                  <th>Shaxsiy Tel.</th>
-                  <th>Ota-Ona Tel.</th>
-                  <th>Manzil</th>
-                  <th>TG Guruhlari</th>
-                  <th>Holat</th>
-                </tr>
+                  <tr>
+                    <th>HEMIS ID</th>
+                    <th>FIO</th>
+                    <th>Tug'ilgan sana</th>
+                    <th>Passport</th>
+                    <th>PNFL</th>
+                    <th>Kurs</th>
+                    <th>Guruh</th>
+                    <th>Telegram ID</th>
+                    <th>Username</th>
+                    <th>TG Telefon</th>
+                    <th>Shaxsiy Tel.</th>
+                    <th>Ota-Ona Tel.</th>
+                    <th>Manzil</th>
+                    <th>TG Guruhlari</th>
+                    <th>Holat</th>
+                  </tr>
                 </thead>
                 <tbody>
-                {% for item in data %}
-                <tr>
-                  <td>{{ item.hemis_id|default:"-" }}</td>
-                  <td>
-                    <strong>{{ item.fio|default:"-" }}</strong>
-                    {% if item.register %}
-                      <br><small class="text-success">Ro'yxatga olingan</small>
-                    {% endif %}
-                  </td>
-                  <td>{{ item.born|default:"-" }}</td>
-                  <td>{{ item.passport|default:"-" }}</td>
-                  <td>{{ item.pnfl|default:"-" }}</td>
-                  <td>{{ item.course|default:"-" }}</td>
-                  <td>{{ item.student_group|default:"-" }}</td>
-                  <td>
-                    {% if item.register %}
-                      {{ item.register.telegram_id|default:"-" }}
-                    {% else %}
-                      <span class="text-muted">-</span>
-                    {% endif %}
-                  </td>
-                  <td>
-                    {% if item.register and item.register.username %}
-                      @{{ item.register.username }}
-                    {% else %}
-                      <span class="text-muted">-</span>
-                    {% endif %}
-                  </td>
-                  <td>
-                    {% if item.register %}
-                      {{ item.register.tg_tel|default:"-" }}
-                    {% else %}
-                      <span class="text-muted">-</span>
-                    {% endif %}
-                  </td>
-                  <td>
-                    {% if item.register %}
-                      {{ item.register.tel|default:"-" }}
-                    {% else %}
-                      <span class="text-muted">-</span>
-                    {% endif %}
-                  </td>
-                  <td>
-                    {% if item.register %}
-                      {{ item.register.parent_tel|default:"-" }}
-                    {% else %}
-                      <span class="text-muted">-</span>
-                    {% endif %}
-                  </td>
-                  <td>
-                    {% if item.register %}
-                      {{ item.register.address|default:"-" }}
-                    {% else %}
-                      <span class="text-muted">-</span>
-                    {% endif %}
-                  </td>
-                  <td>
-                    {% if item.telegram_groups.count > 0 %}
-                      <span class="badge badge-success">{{ item.telegram_groups.count }} ta</span>
-                      <br>
-                      {% for group in item.telegram_groups.all|slice:":2" %}
-                        <small class="text-muted">{{ group.group_name|default:group.group_id }}</small>
-                        {% if not forloop.last %}, {% endif %}
-                      {% endfor %}
-                      {% if item.telegram_groups.count > 2 %}
-                        <br><small class="text-info">+{{ item.telegram_groups.count|add:"-2" }} ta</small>
+                  {% for item in data %}
+                  <tr>
+                    <td>{{ item.hemis_id|default:"-" }}</td>
+                    <td>
+                      <strong>{{ item.fio|default:"-" }}</strong>
+                      {% if item.register %}
+                        <br><small class="text-success">Ro'yxatga olingan</small>
                       {% endif %}
-                    {% else %}
-                      <span class="badge badge-secondary">Guruhsiz</span>
-                    {% endif %}
-                  </td>
-                  <td>
-                    {% if item.register %}
-                      {% if item.register.is_active %}
-                        <span class="badge badge-success">Faol</span>
+                    </td>
+                    <td>
+                      {% if item.born %}
+                        {{ item.born|date:"d.m.Y" }}
                       {% else %}
-                        <span class="badge badge-warning">Nofaol</span>
+                        <span class="text-muted">-</span>
                       {% endif %}
-                      {% if item.register.is_teacher %}
-                        <br><span class="badge badge-info">O'qituvchi</span>
+                    </td>
+                    <td>{{ item.passport|default:"-" }}</td>
+                    <td>{{ item.pnfl|default:"-" }}</td>
+                    <td>{{ item.course|default:"-" }}</td>
+                    <td>{{ item.student_group|default:"-" }}</td>
+                    
+                    <!-- Register ma'lumotlari -->
+                    <td>
+                      {% if item.register %}
+                        {{ item.register.telegram_id|default:"-" }}
+                      {% else %}
+                        <span class="text-muted">-</span>
                       {% endif %}
-                    {% else %}
-                      <span class="badge badge-danger">Ro'yxatdan o'tmagan</span>
-                    {% endif %}
-                  </td>
-                </tr>
-                {% empty %}
-                <tr>
-                  <td colspan="15" class="text-center">
-                    <h5 class="text-muted">Ma'lumot topilmadi</h5>
-                    <p>Hemis ma'lumotlari uchun Excel fayl yuklang</p>
-                  </td>
-                </tr>
-                {% endfor %}
+                    </td>
+                    <td>
+                      {% if item.register and item.register.username %}
+                        @{{ item.register.username }}
+                      {% else %}
+                        <span class="text-muted">-</span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if item.register %}
+                        {{ item.register.tg_tel|default:"-" }}
+                      {% else %}
+                        <span class="text-muted">-</span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if item.register %}
+                        {{ item.register.tel|default:"-" }}
+                      {% else %}
+                        <span class="text-muted">-</span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if item.register %}
+                        {{ item.register.parent_tel|default:"-" }}
+                      {% else %}
+                        <span class="text-muted">-</span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if item.register %}
+                        <div style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" 
+                            title="{{ item.register.address|default:'Kiritilmagan' }}">
+                          {{ item.register.address|default:"-"|truncatechars:50 }}
+                        </div>
+                      {% else %}
+                        <span class="text-muted">-</span>
+                      {% endif %}
+                    </td>
+
+                    <!-- Telegram guruhlari -->
+                    <td>
+                      {% if item.register and item.register.register_groups.count > 0 or item.telegram_groups.count > 0 %}
+                        
+                        {% if item.register and item.register.register_groups.count > 0 %}
+                          <span class="badge badge-success">{{ item.register.register_groups.count }} ta Guruhda a'zo</span>
+                          <br>
+                          <small class="text-muted">
+                            {% for group in item.register.register_groups.all %}
+                              {{ group.group_name|default:group.group_id }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                          </small>
+                          <br>
+                        {% endif %}
+                      
+                      {% else %}
+                        <span class="badge badge-secondary">Guruhsiz</span>
+                      {% endif %}
+                    </td>
+
+
+                    <!-- Holat -->
+                    <td>
+                      {% if item.register %}
+                        {% if item.register.is_active %}
+                          <span class="badge badge-success">Faol</span>
+                        {% else %}
+                          <span class="badge badge-warning">Nofaol</span>
+                        {% endif %}
+                        {% if item.register.is_teacher %}
+                          <br><span class="badge badge-info">O'qituvchi</span>
+                        {% endif %}
+                        <!-- Qo'shimcha ma'lumot: HEMIS bilan bog'lanish holati -->
+                        <br><small class="text-success">HEMIS bilan bog'langan</small>
+                      {% else %}
+                        <span class="badge badge-danger">Ro'yxatdan o'tmagan</span>
+                        {% if item.telegram_groups.count > 0 %}
+                          <br><small class="text-warning">HEMIS guruhi mavjud</small>
+                        {% endif %}
+                      {% endif %}
+                    </td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                    <td colspan="15" class="text-center">
+                      <h5 class="text-muted">Ma'lumot topilmadi</h5>
+                      <p>HEMIS ma'lumotlari uchun Excel fayl yuklang</p>
+                    </td>
+                  </tr>
+                  {% endfor %}
                 </tbody>
               </table>
             </div>

@@ -8,6 +8,33 @@
   <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
   <link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
   <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+
+  <style>
+  .badge {
+    font-size: 0.75em;
+    margin: 1px;
+  }
+
+  .table td {
+    vertical-align: middle;
+  }
+
+  .text-success { color: #28a745 !important; }
+  .text-warning { color: #ffc107 !important; }
+  .text-danger { color: #dc3545 !important; }
+  .text-info { color: #17a2b8 !important; }
+  .text-muted { color: #6c757d !important; }
+
+  .badge-success { background-color: #28a745; }
+  .badge-warning { background-color: #ffc107; color: #212529; }
+  .badge-danger { background-color: #dc3545; }
+  .badge-info { background-color: #17a2b8; }
+  .badge-secondary { background-color: #6c757d; }
+
+  small {
+    font-size: 0.8em;
+  }
+  </style>
   
 {% endblock %}
 
@@ -69,9 +96,14 @@
 
     // File input label update
     $('.custom-file-input').on('change', function() {
-      var fileName = $(this).val().split('\\').pop();
-      $(this).siblings('.custom-file-label').html(fileName);
+      let fileName = $(this).val().split('\\').pop();
+      if (fileName) {
+        $(this).siblings('.custom-file-label').addClass("selected").html(fileName);
+      } else {
+        $(this).siblings('.custom-file-label').removeClass("selected").html("Excel fayl tanlang...");
+      }
     });
+
   });
   </script>
 {% endblock %}

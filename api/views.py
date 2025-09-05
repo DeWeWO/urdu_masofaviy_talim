@@ -3,13 +3,13 @@ from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from core.models import TelegramGroup, Register
-from .serializers import TelegramGroupSerializers, RegisterSerializer, RegisterDetailSerializer
+from .serializers import TelegramGroupSerializer, RegisterSerializer, RegisterStatusSerializer
 
 @api_view(['POST'])
 def add_telegram_group(request):
-    serializers = TelegramGroupSerializers(data=request.data)
-    if serializers.is_valid():
-        group = serializers.save()
+    serializer = TelegramGroupSerializer(data=request.data)
+    if serializer.is_valid():
+        group = serializer.save()
         return Response({
             'success': True,
             'message': 'Group added successfully',
@@ -18,11 +18,11 @@ def add_telegram_group(request):
         }, status=status.HTTP_201_CREATED)
     return Response({
         'success': False,
-        'errors': serializers.errors
+        'errors': serializer.errors
     }, status=status.HTTP_400_BAD_REQUEST)
 
 class RegisterListCreateView(generics.ListCreateAPIView):
-    queryset = Register.objects.all()
+    queryset = Register.objects.select_related('hemis_data').prefetch_related('register_groups')
     serializer_class = RegisterSerializer
 
 class RegisterDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -30,7 +30,7 @@ class RegisterDetailView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'telegram_id'
     
     def get_queryset(self):
-        return Register.objects.all()
+        return Register.objects.select_related('hemis_data').prefetch_related('register_groups')
 
 
 @api_view(['GET'])
@@ -85,23 +85,15 @@ def check_user_status(request, telegram_id):
             }, status=status.HTTP_200_OK)
         
         else:
+            # RegisterStatusSerializer dan foydalanish
+            serializer = RegisterStatusSerializer(user)
+            
             return Response({
                 'success': True,
                 'status': 'registered',
                 'message': 'Foydalanuvchi ro\'yxatdan o\'tgan',
                 'action': 'update_info',
-                'user_data': {
-                    'telegram_id': user.telegram_id,
-                    'username': user.username,
-                    'fio': user.fio,
-                    'pnfl': user.pnfl,
-                    'tg_tel': user.tg_tel,
-                    'tel': user.tel,
-                    'parent_tel': user.parent_tel,
-                    'address': user.address,
-                    'is_active': user.is_active,
-                    'is_teacher': user.is_teacher
-                }
+                'user_data': serializer.data
             }, status=status.HTTP_200_OK)
     
     except Exception as e:
@@ -118,10 +110,14 @@ def get_users_by_status(request):
     """
     try:
         # PNFL bor foydalanuvchilar
-        registered_users = Register.objects.filter(pnfl__isnull=False).values('telegram_id', 'pnfl', 'fio')
+        registered_users = Register.objects.filter(
+            pnfl__isnull=False
+        ).exclude(pnfl='').values('telegram_id', 'pnfl', 'fio')
         
         # PNFL yo'q foydalanuvchilar
-        incomplete_users = Register.objects.filter(pnfl__isnull=True).values('telegram_id', 'fio', 'username')
+        incomplete_users = Register.objects.filter(
+            pnfl__isnull=True
+        ).values('telegram_id', 'fio', 'username')
         
         return Response({
             'success': True,
@@ -145,7 +141,9 @@ def get_user_by_telegram_id(request, telegram_id):
     Telegram ID bo'yicha foydalanuvchining barcha ma'lumotlarini qaytaradi
     """
     try:
-        user = Register.objects.filter(telegram_id=telegram_id).first()
+        user = Register.objects.select_related('hemis_data').prefetch_related(
+            'register_groups'
+        ).filter(telegram_id=telegram_id).first()
         
         if not user:
             return Response({
@@ -154,8 +152,8 @@ def get_user_by_telegram_id(request, telegram_id):
                 'message': 'Bu telegram ID ga tegishli foydalanuvchi mavjud emas'
             }, status=status.HTTP_404_NOT_FOUND)
         
-        # Serializer orqali barcha ma'lumotlarni olish
-        serializer = RegisterDetailSerializer(user)
+        # RegisterSerializer dan foydalanish
+        serializer = RegisterSerializer(user)
         
         return Response({
             'success': True,

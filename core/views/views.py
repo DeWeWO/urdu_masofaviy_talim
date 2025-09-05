@@ -176,7 +176,7 @@ class RegisterService:
         base_query = Register.objects.all()
         
         if group:
-            base_query = base_query.filter(register_group=group)
+            base_query = base_query.filter(register_groups=group)
         
         if target == "reg_true":
             return base_query.filter(is_active=True, is_teacher=False)
