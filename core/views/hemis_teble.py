@@ -40,8 +40,7 @@ def handle_excel_upload(request):
         # Excel faylni o'qish
         df = pd.read_excel(excel_file, engine='openpyxl')
         
-        print(f"Excel ustunlari: {df.columns.tolist()}")
-        print(f"Ma'lumotlar soni: {len(df)}")
+        print(f"{len(df)} ta ma'lumotlar yozildi")
         
         # Ma'lumotlarni saqlash
         result = process_excel_data(df)

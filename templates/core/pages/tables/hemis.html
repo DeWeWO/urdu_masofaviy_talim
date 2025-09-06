@@ -34,6 +34,16 @@
   small {
     font-size: 0.8em;
   }
+
+  .select-wrapper{ position:relative; }
+  .select-wrapper select{ padding-right:2.2rem; }
+  .select-wrapper .clear-btn{
+    position:absolute; right:.5rem; top:50%; transform:translateY(-50%);
+    border:0; background:#f4f6f9; width:28px; height:28px; line-height:26px;
+    text-align:center; border-radius:50%; cursor:pointer; font-size:18px;
+    color:#dc3545; display:none;
+  }
+  .select-wrapper .clear-btn.show{ display:inline-block; }
   </style>
   
 {% endblock %}
@@ -106,4 +116,102 @@
 
   });
   </script>
+
+  <script>
+  (function(){
+    const table = document.getElementById('example1');
+    if(!table) return;
+
+    // Jadval sarlavhasidan ustun indekslarini topamiz
+    function getColIndex(headerText){
+      const ths = Array.from(table.querySelectorAll('thead th'));
+      return ths.findIndex(th => th.textContent.trim().toLowerCase() === headerText.toLowerCase());
+    }
+    const courseCol = getColIndex('Kurs');
+    const groupCol  = getColIndex('Guruh');
+    if (courseCol === -1 || groupCol === -1) return;
+
+    const rows = Array.from(table.querySelectorAll('tbody tr'))
+                      .filter(tr => tr.querySelectorAll('td').length);
+
+    // Unikal qiymatlarni yig'amiz
+    function uniq(values){
+      return Array.from(new Set(values.filter(v => v && v !== '-')));
+    }
+
+    const courses = uniq(rows.map(tr => tr.children[courseCol].textContent.trim()));
+    const groups  = uniq(rows.map(tr => tr.children[groupCol].textContent.trim()));
+
+    // Kurslarni tabiiy tartibda saralash (raqam bo'lsa raqam, bo'lmasa matn)
+    courses.sort((a,b)=>{
+      const na = parseInt(a,10), nb = parseInt(b,10);
+      if(!isNaN(na) && !isNaN(nb)) return na-nb;
+      return a.localeCompare(b, 'uz');
+    });
+    groups.sort((a,b)=> a.localeCompare(b, 'uz'));
+
+    // Selectlarga option qo'shamiz
+    const courseSelect = document.getElementById('courseFilter');
+    const groupSelect  = document.getElementById('groupFilter');
+
+    function fillOptions(select, arr, labelBuilder=(x)=>x){
+      arr.forEach(v=>{
+        const opt = document.createElement('option');
+        opt.value = v;
+        opt.textContent = labelBuilder(v);
+        select.appendChild(opt);
+      });
+    }
+    fillOptions(courseSelect, courses, v => /\d+/.test(v) ? `${v}-kurs` : v);
+    fillOptions(groupSelect, groups);
+
+    // Clear tugmasi holati
+    function syncClearBtn(select){
+      const btn = select.parentElement.querySelector('.clear-btn');
+      if(!btn) return;
+      if(select.value) btn.classList.add('show'); else btn.classList.remove('show');
+    }
+    syncClearBtn(courseSelect);
+    syncClearBtn(groupSelect);
+
+    // Filterlash
+    function applyFilter(){
+      const cVal = courseSelect.value.trim();
+      const gVal = groupSelect.value.trim();
+
+      rows.forEach(tr=>{
+        const cText = tr.children[courseCol].textContent.trim();
+        const gText = tr.children[groupCol].textContent.trim();
+
+        const okCourse = !cVal || cText === cVal;
+        const okGroup  = !gVal || gText === gVal;
+
+        tr.style.display = (okCourse && okGroup) ? '' : 'none';
+      });
+
+      syncClearBtn(courseSelect);
+      syncClearBtn(groupSelect);
+    }
+
+    // Eventlar
+    courseSelect.addEventListener('change', applyFilter);
+    groupSelect.addEventListener('change', applyFilter);
+
+    document.querySelectorAll('.clear-btn').forEach(btn=>{
+      btn.addEventListener('click', function(){
+        const targetSel = document.querySelector(this.getAttribute('data-target'));
+        if(!targetSel) return;
+        targetSel.value = '';
+        applyFilter();
+      });
+    });
+
+    // Agar URL'da ?course= yoki ?group= bo'lsa, avtomatik qo'llash (ixtiyoriy)
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('course')) courseSelect.value = params.get('course');
+    if (params.get('group'))  groupSelect.value  = params.get('group');
+    applyFilter();
+  })();
+  </script>
+
 {% endblock %}

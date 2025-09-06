@@ -109,6 +109,33 @@
         </div>
       {% endif %}
 
+      <!-- Filter dropdown uchun joy, kurs lar bo'yicha -->
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <label class="mb-1">Kurs bo'yicha</label>
+          <div class="select-wrapper">
+            <select id="courseFilter" class="form-control custom-select">
+              <option value="">Barcha kurslar</option>
+              <!-- JS avtomatik to'ldiradi -->
+            </select>
+            <button type="button" class="clear-btn" data-target="#courseFilter" title="Tanlovni tozalash">&times;</button>
+          </div>
+        </div>
+
+        <!-- Filter dropdown uchun joy, guruh lar bo'yicha -->
+        <div class="col-md-3">
+          <label class="mb-1">Guruh bo'yicha</label>
+          <div class="select-wrapper">
+            <select id="groupFilter" class="form-control custom-select">
+              <option value="">Barcha guruhlar</option>
+              <!-- JS avtomatik to'ldiradi -->
+            </select>
+            <button type="button" class="clear-btn" data-target="#groupFilter" title="Tanlovni tozalash">&times;</button>
+          </div>
+        </div>
+      </div>
+
+
       <!-- Asosiy jadval -->
       <div class="row">
         <div class="col-12">
