@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import (
     add_telegram_group, RegisterListCreateView, RegisterDetailView, get_all_users_basic_info,
-    check_user_status, get_users_by_status, get_user_by_telegram_id
+    check_user_status, get_users_by_status, get_user_by_telegram_id, MemberActivityCreateView,
+    MemberActivityListView, member_activity_stats
     )
 
 urlpatterns = [
@@ -12,4 +13,7 @@ urlpatterns = [
     path('users/basic-info/', get_all_users_basic_info, name='get_all_users_basic_info'),
     path('users/check-status/<int:telegram_id>/', check_user_status, name='check_user_status'),
     path('users/by-status/', get_users_by_status, name='get_users_by_status'),
+    path('member-activity/add/', MemberActivityCreateView.as_view(), name='member-activity-create'),
+    path('member-activity/list/', MemberActivityListView.as_view(), name='member-activity-list'),
+    path('member-activity/stats/', member_activity_stats, name='member-activity-stats'),
 ]

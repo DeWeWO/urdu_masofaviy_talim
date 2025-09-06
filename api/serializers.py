@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models import TelegramGroup, Register, HemisTable
+from core.models import TelegramGroup, Register, HemisTable, MemberActivity
 
 
 class TelegramGroupSerializer(serializers.ModelSerializer):
@@ -240,3 +240,58 @@ class StatisticsSerializer(serializers.Serializer):
     total_hemis_records = serializers.IntegerField()
     linked_records = serializers.IntegerField()
     completion_rate = serializers.FloatField()
+
+
+class MemberActivityCreateSerializer(serializers.ModelSerializer):
+    """A'zo faoliyatini yaratish uchun serializer"""
+    
+    telegram_id = serializers.IntegerField(write_only=True)
+    group_id = serializers.IntegerField(write_only=True)
+    
+    class Meta:
+        model = MemberActivity
+        fields = [
+            'telegram_id', 'group_id', 'activity_type', 'action_by',
+            'admin_telegram_id', 'admin_name', 'admin_username', 
+            'activity_time', 'notes'
+        ]
+    
+    def create(self, validated_data):
+        telegram_id = validated_data.pop('telegram_id')
+        group_id = validated_data.pop('group_id')
+        
+        # Register va TelegramGroup obyektlarini topish
+        try:
+            register = Register.objects.get(telegram_id=telegram_id)
+            telegram_group = TelegramGroup.objects.get(group_id=group_id)
+        except Register.DoesNotExist:
+            raise serializers.ValidationError(f"Register with telegram_id {telegram_id} not found")
+        except TelegramGroup.DoesNotExist:
+            raise serializers.ValidationError(f"TelegramGroup with group_id {group_id} not found")
+        
+        return MemberActivity.objects.create(
+            register=register,
+            telegram_group=telegram_group,
+            **validated_data
+        )
+
+
+class MemberActivityListSerializer(serializers.ModelSerializer):
+    """A'zo faoliyatini ko'rsatish uchun serializer"""
+    
+    user_name = serializers.CharField(source='register.fio', read_only=True)
+    username = serializers.CharField(source='register.username', read_only=True)
+    telegram_id = serializers.CharField(source='register.telegram_id', read_only=True)
+    group_name = serializers.CharField(source='telegram_group.group_name', read_only=True)
+    group_id = serializers.CharField(source='telegram_group.group_id', read_only=True)
+    activity_type_display = serializers.CharField(source='get_activity_type_display', read_only=True)
+    action_by_display = serializers.CharField(source='get_action_by_display', read_only=True)
+    
+    class Meta:
+        model = MemberActivity
+        fields = [
+            'id', 'user_name', 'username', 'telegram_id', 'group_name', 'group_id',
+            'activity_type', 'activity_type_display', 'action_by', 'action_by_display',
+            'admin_telegram_id', 'admin_name', 'admin_username', 'activity_time', 
+            'created_at', 'notes'
+        ]
