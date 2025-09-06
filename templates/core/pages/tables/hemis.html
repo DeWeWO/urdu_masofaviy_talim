@@ -44,6 +44,10 @@
     color:#dc3545; display:none;
   }
   .select-wrapper .clear-btn.show{ display:inline-block; }
+
+  .dt-buttons {
+    margin-right: 15px;
+  }
   </style>
   
 {% endblock %}
@@ -80,41 +84,41 @@
 
   <script src="{% static 'dist/js/demo.js' %}"></script>
 
-
   <script>
-  $(document).ready(function() {
-    // DataTable sozlash
-    $('#example1').DataTable({
-      "responsive": true,
-      "lengthChange": true,
-      "autoWidth": false,
-      "pageLength": 25,
-      "order": [[ 0, "desc" ]],
-      "language": {
-        "search": "Qidirish:",
-        "lengthMenu": "_MENU_ ta yozuv ko'rsatish",
-        "info": "_START_ dan _END_ gacha (_TOTAL_ dan)",
-        "infoEmpty": "Ma'lumot yo'q",
-        "paginate": {
-          "first": "Birinchi",
-          "last": "Oxirgi",
-          "next": "Keyingi",
-          "previous": "Oldingi"
+    $(document).ready(function() {
+      let table = $('#example1').DataTable({
+        "responsive": true,
+        "lengthChange": true,
+        "autoWidth": false,
+        "pageLength": 25,
+        "order": [[0, "desc"]],
+        "language": {
+          "search": "Qidirish:",
+          "lengthMenu": "_MENU_ ta yozuv ko'rsatish",
+          "info": "_START_ dan _END_ gacha (_TOTAL_ dan)",
+          "infoEmpty": "Ma'lumot yo'q",
+          "paginate": {
+            "first": "Birinchi",
+            "last": "Oxirgi",
+            "next": "Keyingi",
+            "previous": "Oldingi"
+          }
+        },
+        dom: '<"row"<"col-md-6"l><"col-md-6 d-flex justify-content-end align-items-center"Bf>>rtip',
+        buttons: [
+          { extend: 'colvis', text: "Ko'rsatiladigan ustunlar", className: 'btn btn-info'}
+        ]
+      });
+
+      $('.custom-file-input').on('change', function() {
+        let fileName = $(this).val().split('\\').pop();
+        if (fileName) {
+          $(this).siblings('.custom-file-label').addClass("selected").html(fileName);
+        } else {
+          $(this).siblings('.custom-file-label').removeClass("selected").html("Excel fayl tanlang...");
         }
-      }
+      });
     });
-
-    // File input label update
-    $('.custom-file-input').on('change', function() {
-      let fileName = $(this).val().split('\\').pop();
-      if (fileName) {
-        $(this).siblings('.custom-file-label').addClass("selected").html(fileName);
-      } else {
-        $(this).siblings('.custom-file-label').removeClass("selected").html("Excel fayl tanlang...");
-      }
-    });
-
-  });
   </script>
 
   <script>
