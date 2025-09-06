@@ -166,7 +166,7 @@
         select.appendChild(opt);
       });
     }
-    fillOptions(courseSelect, courses, v => /\d+/.test(v) ? `${v}-kurs` : v);
+    fillOptions(courseSelect, courses, v => /\d+/.test(v) ? `${v}` : v);
     fillOptions(groupSelect, groups);
 
     // Clear tugmasi holati
