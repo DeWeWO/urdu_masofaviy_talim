@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # my_apps
     'core.apps.CoreConfig',
     'api.apps.ApiConfig',
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [
@@ -154,3 +155,11 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = "accounts.CustomUser"
+
+LOGIN_URL = "login_view"
+LOGOUT_URL = "logout_view"
+LOGIN_REDIRECT_URL = "main_view"
+LOGOUT_REDIRECT_URL = "main_view"
+ACCOUNT_LOGOUT_REDIRECT_URL = "login_view"
