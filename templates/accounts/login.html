@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Kirish{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="login-page-wrapper">
+  <div class="login-box">
+    <div class="card card-outline card-primary">
+      <div class="card-header text-center">
+        <a href="#" class="h1"><b>UrDU</b>MT</a>
+      </div>
+      <div class="card-body">
+        <p class="login-box-msg">Login parol kiritish</p>
+
+        <!-- Alert messages -->
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+
+          <!-- Username -->
+          <div class="input-group mb-3">
+            <input type="text" name="{{ form.username.name }}" 
+                   value="{{ form.username.value|default:'' }}" 
+                   class="form-control {% if form.username.errors %}is-invalid{% endif %}" 
+                   placeholder="Username" required>
+            <div class="input-group-append">
+              <div class="input-group-text"><span class="fas fa-user"></span></div>
+            </div>
+            {% if form.username.errors %}
+              <div class="invalid-feedback">{{ form.username.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <!-- Password + toggle icon -->
+          <div class="input-group mb-3">
+            <input type="password" id="passwordInput" name="{{ form.password.name }}" 
+                   class="form-control {% if form.password.errors %}is-invalid{% endif %}" 
+                   placeholder="Password" required>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-eye" id="togglePassword" style="cursor:pointer;"></span>
+              </div>
+            </div>
+            {% if form.password.errors %}
+              <div class="invalid-feedback">{{ form.password.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <!-- Remember Me -->
+          <div class="row">
+            <div class="col-8">
+              <div class="icheck-primary">
+                {{ form.remember_me }}
+                <label for="id_remember_me">Eslab qolsh</label>
+              </div>
+            </div>
+            <div class="col-4">
+              <button type="submit" class="btn btn-primary btn-block">Kirish</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+  // Parolni ko‘rsatish/berkitish
+  document.getElementById("togglePassword").addEventListener("click", function () {
+    let pwd = document.getElementById("passwordInput");
+    if (pwd.type === "password") {
+      pwd.type = "text";
+      this.classList.remove("fa-eye");
+      this.classList.add("fa-eye-slash");
+    } else {
+      pwd.type = "password";
+      this.classList.remove("fa-eye-slash");
+      this.classList.add("fa-eye");
+    }
+  });
+</script>
+{% endblock extra_js %}

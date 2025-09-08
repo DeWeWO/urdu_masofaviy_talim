@@ -161,5 +161,8 @@ AUTH_USER_MODEL = "accounts.CustomUser"
 LOGIN_URL = "login_view"
 LOGOUT_URL = "logout_view"
 LOGIN_REDIRECT_URL = "main_view"
-LOGOUT_REDIRECT_URL = "main_view"
+LOGOUT_REDIRECT_URL = "login_view"
 ACCOUNT_LOGOUT_REDIRECT_URL = "login_view"
+
+SESSION_COOKIE_AGE = 20  #1209600
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
