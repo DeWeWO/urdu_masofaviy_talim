@@ -218,4 +218,12 @@
   })();
   </script>
 
+  <script>
+    // Fayl tanlanganda nomini chiqarish
+    document.getElementById("excelFile").addEventListener("change", function () {
+      let fileName = this.files[0] ? this.files[0].name : "Excel fayl tanlang...";
+      this.nextElementSibling.innerText = fileName;
+    });
+  </script>
+
 {% endblock %}
