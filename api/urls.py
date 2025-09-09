@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (
     add_telegram_group, RegisterListCreateView, RegisterDetailView, get_all_users_basic_info,
     check_user_status, get_users_by_status, get_user_by_telegram_id, MemberActivityCreateView,
-    MemberActivityListView, member_activity_stats
+    MemberActivityListView, member_activity_stats, get_user_info
     )
 
 urlpatterns = [
@@ -16,4 +16,5 @@ urlpatterns = [
     path('member-activity/add/', MemberActivityCreateView.as_view(), name='member-activity-create'),
     path('member-activity/list/', MemberActivityListView.as_view(), name='member-activity-list'),
     path('member-activity/stats/', member_activity_stats, name='member-activity-stats'),
+    path("user-info/", get_user_info, name="user-info"),
 ]

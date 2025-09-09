@@ -295,3 +295,48 @@ class MemberActivityListSerializer(serializers.ModelSerializer):
             'admin_telegram_id', 'admin_name', 'admin_username', 'activity_time', 
             'created_at', 'notes'
         ]
+
+class HemisSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HemisTable
+        fields = (
+            "hemis_id",
+            "fio",
+            "born",
+            "passport",
+            "pnfl",
+            "course",
+            "student_group",
+        )
+
+class RegisterSerializer(serializers.ModelSerializer):
+    hemis = serializers.SerializerMethodField()
+    phones = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Register
+        fields = (
+            "telegram_id",
+            "username",
+            "fio",
+            "hemis_id",
+            "pnfl",
+            "is_active",
+            "is_teacher",
+            "address",
+            "phones",
+            "hemis",
+        )
+
+    def get_hemis(self, obj):
+        hemis = getattr(obj, "hemis_data", None)
+        if hemis:
+            return HemisSerializer(hemis).data
+        return None
+
+    def get_phones(self, obj):
+        return {
+            "tg_tel": obj.tg_tel or None,
+            "tel": obj.tel or None,
+            "parent_tel": obj.parent_tel or None,
+        }

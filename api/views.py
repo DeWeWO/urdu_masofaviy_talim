@@ -4,6 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.core.exceptions import ObjectDoesNotExist
 from core.models import TelegramGroup, Register, MemberActivity
 from .serializers import (
     TelegramGroupSerializer, RegisterSerializer, RegisterStatusSerializer,
@@ -11,6 +12,7 @@ from .serializers import (
     )
 
 import logging
+
 
 logger = logging.getLogger(__name__)
 
@@ -284,3 +286,44 @@ def member_activity_stats(request):
             "success": False,
             "message": f"Statistika xatolik: {str(e)}"
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def get_user_info(request):
+    telegram_id = request.query_params.get("telegram_id")
+
+    if not telegram_id:
+        return Response({"detail": "telegram_id required"}, status=400)
+
+    try:
+        register = Register.objects.select_related("hemis_data").get(telegram_id=telegram_id)
+    except ObjectDoesNotExist:
+        return Response({"detail": "register_not_found"}, status=404)
+
+    hemis = register.hemis_data
+
+    data = {
+        "telegram_id": register.telegram_id,
+        "username": register.username,
+        "fio": register.fio,
+        "hemis_id": register.hemis_id,
+        "pnfl": register.pnfl,
+        "is_active": register.is_active,
+        "is_teacher": register.is_teacher,
+        "address": register.address,
+        "phones": {
+            "tg_tel": register.tg_tel,
+            "tel": register.tel,
+            "parent_tel": register.parent_tel
+        },
+        "hemis": {
+            "hemis_id": hemis.hemis_id if hemis else None,
+            "fio": hemis.fio if hemis else None,
+            "born": hemis.born if hemis else None,
+            "passport": hemis.passport if hemis else None,
+            "pnfl": hemis.pnfl if hemis else None,
+            "course": hemis.course if hemis else None,
+            "student_group": hemis.student_group if hemis else None,
+        } if hemis else None
+    }
+
+    return Response(data)
