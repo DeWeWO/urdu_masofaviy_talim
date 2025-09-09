@@ -5,6 +5,7 @@ from .forms import AdminsCreationForm
 from django.contrib.auth.views import LoginView
 from django.contrib import messages
 from django.urls import reverse_lazy
+from django.views import View
 from .forms import CustomLoginForm
 
 class CustomLoginView(LoginView):
@@ -13,7 +14,6 @@ class CustomLoginView(LoginView):
     redirect_authenticated_user = False
 
     def get_initial(self):
-        """Agar user login qilingan bo‘lsa, username inputni oldindan to‘ldirish"""
         initial = super().get_initial()
         if self.request.user.is_authenticated:
             initial["username"] = self.request.user.username
@@ -24,9 +24,9 @@ class CustomLoginView(LoginView):
         response = super().form_valid(form)
 
         if remember_me:
-            self.request.session.set_expiry(1209600)  # 2 hafta (14 kun)
+            self.request.session.set_expiry(1209600)
         else:
-            self.request.session.set_expiry(0)  # brauzer yopilganda sessiya tugaydi
+            self.request.session.set_expiry(0)
 
         return response
     
@@ -39,19 +39,7 @@ class CustomLoginView(LoginView):
         return reverse_lazy("main_view")
 
 
-def logout_view(request):
-    logout(request)
-    return redirect("login")
-
-@login_required
-@user_passes_test(lambda u: u.is_superadmin)
-def add_admin(requset):
-    if requset.method == "POST":
-        form = AdminsCreationForm(requset.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("main_view")
-        
-        else:
-            form = AdminsCreationForm()
-        return render(requset, "accounts/add_admin.html", {"form": form})
+class LogoutView(View):
+    def get(self, request):
+        logout(request=request)
+        return redirect("login_view")

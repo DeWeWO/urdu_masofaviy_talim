@@ -5,6 +5,7 @@ import requests
 import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
@@ -330,6 +331,7 @@ class MessageSender:
 
 # ========================= VIEW FUNCTIONS =========================
 
+@login_required
 def main_view(request):
     """Asosiy sahifa"""
     return render(request, 'core/index.html')
