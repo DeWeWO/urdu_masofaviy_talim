@@ -1,6 +1,8 @@
+import logging
 from rest_framework import serializers
 from core.models import TelegramGroup, Register, HemisTable, MemberActivity
 
+logger = logging.getLogger(__name__)
 
 class TelegramGroupSerializer(serializers.ModelSerializer):
     members_count = serializers.SerializerMethodField()
@@ -100,39 +102,56 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         group_ids = validated_data.pop("group_ids", [])
-        
-        # get_or_create ishlatish
+        # convert items to int (safe)
+        group_ids = [int(g) for g in group_ids] if group_ids else []
+
         register, created = Register.objects.get_or_create(
             telegram_id=validated_data['telegram_id'],
             defaults=validated_data
         )
-        
+
         if not created:
-            # Mavjud registerni yangilash
+            # update fields that are present
             for attr, value in validated_data.items():
                 setattr(register, attr, value)
             register.save()
 
-        # Guruhlarni bog'lash
+        # Guruhlarni bog'lash — agar guruh topilmasa, yarataylik (log qilamiz)
         if group_ids:
-            groups = TelegramGroup.objects.filter(group_id__in=group_ids)
-            register.register_groups.set(groups)
-        
+            existing = list(TelegramGroup.objects.filter(group_id__in=group_ids))
+            existing_ids = {g.group_id for g in existing}
+            missing = [gid for gid in group_ids if gid not in existing_ids]
+
+            for gid in missing:
+                logger.info(f"RegisterSerializer: group {gid} not found — creating placeholder")
+                g = TelegramGroup.objects.create(group_id=gid, group_name=str(gid), is_active=True)
+                existing.append(g)
+
+            register.register_groups.add(*existing)   # 🔥 set emas, add
+            logger.info(f"Register {register.telegram_id} linked to groups: {[g.group_id for g in existing]}")
+
         return register
 
     def update(self, instance, validated_data):
         group_ids = validated_data.pop("group_ids", None)
-        
-        # Asosiy maydonlarni yangilash
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
 
-        # Guruhlarni yangilash
         if group_ids is not None:
-            groups = TelegramGroup.objects.filter(group_id__in=group_ids)
-            instance.register_groups.set(groups)
-        
+            group_ids = [int(g) for g in group_ids] if group_ids else []
+            groups = list(TelegramGroup.objects.filter(group_id__in=group_ids))
+            existing_ids = {g.group_id for g in groups}
+            missing = [gid for gid in group_ids if gid not in existing_ids]
+
+            for gid in missing:
+                logger.info(f"RegisterSerializer.update: group {gid} not found — creating placeholder")
+                g = TelegramGroup.objects.create(group_id=gid, group_name=str(gid), is_active=True)
+                groups.append(g)
+
+            instance.register_groups.add(*groups)   # 🔥 set emas, add
+            logger.info(f"Register {instance.telegram_id} updated groups: {[g.group_id for g in groups]}")
+
         return instance
 
 
@@ -309,7 +328,7 @@ class HemisSerializer(serializers.ModelSerializer):
             "student_group",
         )
 
-class RegisterSerializer(serializers.ModelSerializer):
+class RegisterPublicSerializer(serializers.ModelSerializer):
     hemis = serializers.SerializerMethodField()
     phones = serializers.SerializerMethodField()
 
