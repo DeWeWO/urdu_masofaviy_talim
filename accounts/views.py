@@ -1,12 +1,16 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .forms import AdminsCreationForm
 from django.contrib.auth.views import LoginView
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views import View
-from .forms import CustomLoginForm
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .forms import AdminsCreationForm, CustomLoginForm
+from .models import CustomUser
+
 
 class CustomLoginView(LoginView):
     template_name = "accounts/login.html"
@@ -43,3 +47,20 @@ class LogoutView(View):
     def get(self, request):
         logout(request=request)
         return redirect("login_view")
+
+@api_view(['GET'])
+def check_admin(request):
+    telegram_id = request.query_params.get("telegram_id")
+
+    if not telegram_id:
+        return Response({"detail": "telegram_id required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        user = CustomUser.objects.get(telegram_id=telegram_id, is_active=True)
+        return Response({
+            "is_admin": True,
+            "username": user.username,
+            "is_superadmin": user.is_superadmin
+        })
+    except CustomUser.DoesNotExist:
+        return Response({"is_admin": False})

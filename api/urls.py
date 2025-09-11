@@ -1,4 +1,5 @@
 from django.urls import path
+from accounts.views import check_admin
 from .views import (
     add_telegram_group, RegisterListCreateView, RegisterDetailView, get_all_users_basic_info,
     check_user_status, get_users_by_status, get_user_by_telegram_id, MemberActivityCreateView,
@@ -17,4 +18,5 @@ urlpatterns = [
     path('member-activity/list/', MemberActivityListView.as_view(), name='member-activity-list'),
     path('member-activity/stats/', member_activity_stats, name='member-activity-stats'),
     path("user-info/", get_user_info, name="user-info"),
+    path("check-admin/", check_admin, name="check_admin"),
 ]
