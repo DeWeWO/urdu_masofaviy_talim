@@ -88,17 +88,14 @@ class RegisterSerializer(serializers.ModelSerializer):
         return value
 
     def validate_group_ids(self, value):
+        # Faqat raqam ekanini tekshirib qaytaradi
         if value:
-            existing_groups = TelegramGroup.objects.filter(
-                group_id__in=value
-            ).values_list('group_id', flat=True)
-            
-            missing_groups = set(value) - set(existing_groups)
-            if missing_groups:
-                raise serializers.ValidationError(
-                    f"Bu guruhlar topilmadi: {list(missing_groups)}"
-                )
+            try:
+                return [int(v) for v in value]
+            except (ValueError, TypeError):
+                raise serializers.ValidationError("Guruh IDlari noto‘g‘ri formatda yuborildi.")
         return value
+
 
     def create(self, validated_data):
         group_ids = validated_data.pop("group_ids", [])
