@@ -1,0 +1,99 @@
+{% load static %}
+
+<div class="container">
+      <div class="header">
+          <h1>Telegram Guruhlariga Ommaviy Xabar Yuborish</h1>
+      </div>
+      
+      <div class="content">
+          <div class="message-panel">
+              <form id="massMessageForm" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  
+                  <div class="form-group">
+                      <label for="messageText">Xabar Matni:</label>
+                      <textarea 
+                          id="messageText" 
+                          name="message_text" 
+                          placeholder="Bu yerga xabar matnini kiriting..."
+                      ></textarea>
+                      <div class="text-formatting-help">
+                          💡 HTML formatlar: <b>&lt;b&gt;qalin&lt;/b&gt;</b>, <i>&lt;i&gt;qiya&lt;/i&gt;</i>, 
+                          <code>&lt;code&gt;kod&lt;/code&gt;</code>, <u>&lt;u&gt;chizilgan&lt;/u&gt;</u>, 
+                          <a href="#" onclick="return false">&lt;a href="link"&gt;havola&lt;/a&gt;</a>
+                      </div>
+                  </div>
+                  
+                  <div class="form-group">
+                      <label>Fayllar (Rasm, Video, Audio, Hujjat):</label>
+                      <div class="file-upload-section" id="fileUploadSection">
+                          <div class="file-input-wrapper">
+                              <input 
+                                  type="file" 
+                                  class="file-input" 
+                                  id="fileInput" 
+                                  name="files" 
+                                  multiple 
+                                  accept="*/*"
+                              >
+                              <div class="file-button">📁 Fayllarni Tanlang</div>
+                          </div>
+                          <div class="file-info">
+                              Bir nechta faylni birdan tanlashingiz mumkin. Max 50MB gacha.
+                          </div>
+                      </div>
+                      
+                      <div class="selected-files" id="selectedFiles"></div>
+                  </div>
+                  
+                  <button type="submit" class="send-button" id="sendButton">
+                      Tanlangan Guruhlarga Yuborish
+                  </button>
+                  
+                  <div class="progress-bar" id="progressBar">
+                      <div class="progress-fill" id="progressFill"></div>
+                  </div>
+                  
+                  <div class="loading" id="loading">
+                      ⏳ Xabarlar yuborilmoqda...
+                  </div>
+                  
+                  <div class="status" id="status"></div>
+              </form>
+          </div>
+          
+          <div class="groups-panel">
+              <h3 style="margin-bottom: 15px;">Telegram Guruhlar</h3>
+              
+              <div class="select-all">
+                  <label>
+                      <input type="checkbox" id="selectAll"> Barchasini tanlash
+                  </label>
+              </div>
+              
+              <div class="groups-list">
+                  {% for group in groups %}
+                  <div class="group-item">
+                      <input 
+                          type="checkbox" 
+                          class="group-checkbox" 
+                          name="group_ids" 
+                          value="{{ group.group_id }}"
+                          id="group_{{ group.group_id }}"
+                      >
+                      <div class="group-info">
+                          <div class="group-name">{{ group.group_name|default:"Noma'lum Guruh" }}</div>
+                          <div class="group-id">ID: {{ group.group_id }}</div>
+                      </div>
+                  </div>
+                  {% empty %}
+                  <div class="group-item">
+                      <div class="group-info">
+                          <div class="group-name">Guruhlar topilmadi</div>
+                      </div>
+                  </div>
+                  {% endfor %}
+              </div>
+          </div>
+      </div>
+  </div>

@@ -1,547 +1,602 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tasdiqlangan talabalar</title>
+{% extends  'base.html' %}
+{% load static %}
 
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
-  <!-- DataTables -->
-  <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
-</head>
-<body class="hold-transition sidebar-mini">
-<div class="wrapper">
-  <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-    <!-- Left navbar links -->
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="../../index3.html" class="nav-link">Home</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
-      </li>
-    </ul>
+{% block title %} Telegram Guruhlar {% endblock title %}
 
-    <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
-      <!-- Navbar Search -->
-      <li class="nav-item">
-        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-          <i class="fas fa-search"></i>
-        </a>
-        <div class="navbar-search-block">
-          <form class="form-inline">
-            <div class="input-group input-group-sm">
-              <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-              <div class="input-group-append">
-                <button class="btn btn-navbar" type="submit">
-                  <i class="fas fa-search"></i>
-                </button>
-                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </li>
+{% block extra_css %}
 
-      <!-- Messages Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-comments"></i>
-          <span class="badge badge-danger navbar-badge">3</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img src="../../dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  Brad Diesel
-                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">Call me whenever you can...</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img src="../../dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  John Pierce
-                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">I got your message bro</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img src="../../dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  Nora Silvester
-                  <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">The subject goes here</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-        </div>
-      </li>
-      <!-- Notifications Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge">15</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header">15 Notifications</span>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i> 8 friend requests
-            <span class="float-right text-muted text-sm">12 hours</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-        </div>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-          <i class="fas fa-expand-arrows-alt"></i>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-          <i class="fas fa-th-large"></i>
-        </a>
-      </li>
-    </ul>
-  </nav>
-  <!-- /.navbar -->
+  <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+  <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+  <link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+  
+  <style>
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+      
+      body {
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          background: #f5f5f5;
+          padding: 20px;
+      }
+      
+      .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          background: white;
+          border-radius: 10px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+          overflow: hidden;
+      }
+      
+      .header {
+          background: #0088cc;
+          color: white;
+          padding: 20px;
+          text-align: center;
+      }
+      
+      .content {
+          display: flex;
+          min-height: 600px;
+      }
+      
+      .message-panel {
+          flex: 2;
+          padding: 20px;
+          border-right: 1px solid #eee;
+      }
+      
+      .groups-panel {
+          flex: 1;
+          padding: 20px;
+          background: #fafafa;
+      }
+      
+      .form-group {
+          margin-bottom: 20px;
+      }
+      
+      label {
+          display: block;
+          margin-bottom: 8px;
+          font-weight: 600;
+          color: #333;
+      }
+      
+      textarea {
+          width: 100%;
+          min-height: 200px;
+          padding: 15px;
+          border: 2px solid #ddd;
+          border-radius: 8px;
+          font-size: 14px;
+          font-family: inherit;
+          resize: vertical;
+      }
+      
+      textarea:focus {
+          outline: none;
+          border-color: #0088cc;
+      }
+      
+      .file-upload-section {
+          border: 2px dashed #ddd;
+          border-radius: 8px;
+          padding: 20px;
+          text-align: center;
+          background: #fafafa;
+          margin-bottom: 15px;
+      }
+      
+      .file-upload-section.dragover {
+          border-color: #0088cc;
+          background: #f0f8ff;
+      }
+      
+      .file-input-wrapper {
+          position: relative;
+          display: inline-block;
+      }
+      
+      .file-input {
+          position: absolute;
+          opacity: 0;
+          width: 100%;
+          height: 100%;
+          cursor: pointer;
+      }
+      
+      .file-button {
+          background: #0088cc;
+          color: white;
+          padding: 12px 24px;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background 0.3s;
+          font-weight: 500;
+      }
+      
+      .file-button:hover {
+          background: #0077b5;
+      }
+      
+      .file-info {
+          margin-top: 10px;
+          font-size: 12px;
+          color: #666;
+      }
+      
+      .selected-files {
+          margin-top: 15px;
+      }
+      
+      .file-item {
+          display: flex;
+          align-items: center;
+          background: white;
+          border: 1px solid #ddd;
+          border-radius: 6px;
+          padding: 10px;
+          margin-bottom: 8px;
+      }
+      
+      .file-icon {
+          width: 40px;
+          height: 40px;
+          border-radius: 4px;
+          margin-right: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 16px;
+          font-weight: bold;
+          color: white;
+      }
+      
+      .file-icon.image { background: #4CAF50; }
+      .file-icon.video { background: #FF9800; }
+      .file-icon.audio { background: #9C27B0; }
+      .file-icon.document { background: #607D8B; }
+      
+      .file-details {
+          flex: 1;
+      }
+      
+      .file-name {
+          font-weight: 500;
+          color: #333;
+          margin-bottom: 2px;
+      }
+      
+      .file-size {
+          font-size: 12px;
+          color: #666;
+      }
+      
+      .remove-file {
+          width: 24px;
+          height: 24px;
+          border: none;
+          background: #dc3545;
+          color: white;
+          border-radius: 50%;
+          cursor: pointer;
+          font-size: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+      }
+      
+      .remove-file:hover {
+          background: #c82333;
+      }
+      
+      .groups-list {
+          max-height: 450px;
+          overflow-y: auto;
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          background: white;
+      }
+      
+      .group-item {
+          display: flex;
+          align-items: center;
+          padding: 12px;
+          border-bottom: 1px solid #eee;
+          transition: background 0.2s;
+      }
+      
+      .group-item:hover {
+          background: #f8f9fa;
+      }
+      
+      .group-item:last-child {
+          border-bottom: none;
+      }
+      
+      .group-checkbox {
+          margin-right: 10px;
+          transform: scale(1.2);
+      }
+      
+      .group-info {
+          flex: 1;
+      }
+      
+      .group-name {
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 2px;
+      }
+      
+      .group-id {
+          font-size: 12px;
+          color: #666;
+      }
+      
+      .select-all {
+          padding: 10px;
+          background: #e9ecef;
+          border-bottom: 2px solid #ddd;
+          font-weight: 600;
+      }
+      
+      .send-button {
+          background: #28a745;
+          color: white;
+          border: none;
+          padding: 15px 30px;
+          font-size: 16px;
+          font-weight: 600;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.3s;
+          width: 100%;
+      }
+      
+      .send-button:hover:not(:disabled) {
+          background: #218838;
+          transform: translateY(-1px);
+      }
+      
+      .send-button:disabled {
+          background: #6c757d;
+          cursor: not-allowed;
+      }
+      
+      .status {
+          margin-top: 15px;
+          padding: 12px;
+          border-radius: 6px;
+          display: none;
+      }
+      
+      .status.success {
+          background: #d4edda;
+          border: 1px solid #c3e6cb;
+          color: #155724;
+      }
+      
+      .status.error {
+          background: #f8d7da;
+          border: 1px solid #f5c6cb;
+          color: #721c24;
+      }
+      
+      .loading {
+          display: none;
+          text-align: center;
+          color: #666;
+          margin-top: 10px;
+      }
+      
+      .text-formatting-help {
+          font-size: 12px;
+          color: #666;
+          margin-top: 5px;
+          line-height: 1.4;
+      }
+      
+      .progress-bar {
+          width: 100%;
+          height: 4px;
+          background: #e9ecef;
+          border-radius: 2px;
+          overflow: hidden;
+          margin-top: 10px;
+          display: none;
+      }
+      
+      .progress-fill {
+          height: 100%;
+          background: #0088cc;
+          width: 0%;
+          transition: width 0.3s;
+      }
+  </style>
 
-  <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="../../index.html" class="brand-link">
-      <img src="../../dist/img/AdminLTELogo.jpg" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">UrDU MT</span>
-    </a>
+{% endblock %}
 
-    <!-- Sidebar -->
-    <div class="sidebar">
 
-      <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-          <li class="nav-item">
-            <a href="../../index.html" class="nav-link">
-              <i class="nav-icon fas fa-th-large"></i>
-              <p>
-                Home Page
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Charts
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="pages/charts/chartjs.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>ChartJS</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/charts/flot.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Flot</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/charts/inline.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Inline</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/charts/uplot.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>uPlot</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Tables
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="tasdiqlash.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Tasdiqlash</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="tasdiqlangan.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Tasdiqlangan</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="tg_guruh.html" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Telegram guruh nzorati</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="pages/calendar.html" class="nav-link">
-              <i class="nav-icon far fa-calendar-alt"></i>
-              <p>
-                Calendar
-                <span class="badge badge-info right">2</span>
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon far fa-envelope"></i>
-              <p>
-                Mailbox
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="pages/mailbox/mailbox.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Inbox</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/mailbox/compose.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Compose</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/mailbox/read-mail.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Read</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-book"></i>
-              <p>
-                Pages
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="pages/examples/contacts.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Contacts</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/examples/faq.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>FAQ</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/examples/contact-us.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Contact us</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon far fa-plus-square"></i>
-              <p>
-                Extras
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="pages/examples/login.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Login</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/examples/register.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Register</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/examples/forgot-password.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Forgot Password</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/examples/recover-password.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Recover Password</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/examples/lockscreen.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Lockscreen</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </nav>
-      <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
-  </aside>
+{% block content %}
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>Telegram guruhlar nazorati</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Telegram guruhlar nazorati</li>
-            </ol>
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>
+  {% include 'base/navbar.html' %}
 
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Lorem ipsum dolor sit amet.</h3>
-              </div>
-              <!-- Example single danger button -->
-              <!-- /.card-header -->
-              <div class="card-body"style="overflow-x: auto; width: 100%;">
-                <div style="text-align: right; padding-bottom: 7px;">
-                    <div class="btn-group">
-                    <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        Guruhlar
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">101</a></li>
-                        <li><a class="dropdown-item" href="#">102</a></li>
-                        <li><a class="dropdown-item" href="#">105</a></li>
-                        <li><a class="dropdown-item" href="#">404</a></li>
-                    </ul>
-                    </div>
-                </div>
-                <table id="example1" class="table table-bordered table-striped table-hover">
-                  <thead>
-                  <tr>
-                    <th>Telegram id</th>
-                    <th>Username</th>
-                    <th>F.I.O</th>
-                    <th>Status</th>
-                    <th>Hemis id</th>
-                    <th>Qo'shilgan vaqti (dastlabki)</th>
-                    <th>Chiqib ketgan vaqti (oxirgi)</th>
-                    <th>Guruhdami</th>
-                    <th>Qo'shilish va chiqib ketishlar soni</th>
-                    <th>Oxirgi post</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                    <td>12345678</td>
-                    <td>dewew</td>
-                    <td>DeWeW</td>
-                    <td>Admin</td>
-                    <td>Unknown</td>
-                    <td>2000</td>
-                    <td>2500</td>
-                    <td>Ha</td>
-                    <td>0</td>
-                    <td>Salom gruppadagilar</td>
-                  </tr>
-                  <tr>
-                    <td>12345678</td>
-                    <td>jhon</td>
-                    <td>John</td>
-                    <td>Talaba</td>
-                    <td>1111</td>
-                    <td>2025</td>
-                    <td>2026</td>
-                    <td>Ha</td>
-                    <td>7</td>
-                    <td>Ketdm</td>
-                  </tr>
-                  <tr>
-                    <td>12345678</td>
-                    <td>lorem</td>
-                    <td>Lorem</td>
-                    <td>O'qituvchi</td>
-                    <td>0001</td>
-                    <td>2024</td>
-                    <td>2027</td>
-                    <td>ha</td>
-                    <td>3</td>
-                    <td>Tixa</td>
-                  </tr>
-                  </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>Lorem</th>
-                    <th>Lorem</th>
-                    <th>Lorem</th>
-                    <th>Lorem</th>
-                    <th>Lorem</th>
-                    <th>Lorem</th>
-                    <th>Lorem</th>
-                    <th>Lorem</th>
-                    <th>Lorem</th>
-                    <th>Lorem</th>
-                  </tr>
-                  </tfoot>
-                </table>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
-        </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-  <footer class="main-footer">
-    <strong>Copyright &copy; 2025 <a href="index.html">DeWeW</a>.</strong>All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 0.0.1
-    </div>
-  </footer>
+  {% include 'base/aside.html' with table_active=True tg_active=True %}
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
+  {% include 'base/content_tggroup.html' %}
 
-<!-- jQuery -->
-<script src="../../plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- DataTables  & Plugins -->
-<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="../../plugins/jszip/jszip.min.js"></script>
-<script src="../../plugins/pdfmake/pdfmake.min.js"></script>
-<script src="../../plugins/pdfmake/vfs_fonts.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-<!-- AdminLTE App -->
-<script src="../../dist/js/adminlte.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="../../dist/js/demo.js"></script>
-<!-- Page specific script -->
+  {% include 'base/footer.html' %}
 
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.min.js" integrity="sha384-RuyvpeZCxMJCqVUGFI0Do1mQrods/hhxYlcVfGPOfQtPJh0JCw12tUAZ/Mv10S7D" crossorigin="anonymous"></script>
+  {% include 'base/down_aside.html' %}
 
-<script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
-</script>
-</body>
-</html>
+{% endblock content %}
+  
+
+{% block extra_js %}
+
+  <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+  <script src="{% static 'plugins/jszip/jszip.min.js' %}"></script>
+  <script src="{% static 'plugins/pdfmake/pdfmake.min.js' %}"></script>
+  <script src="{% static 'plugins/pdfmake/vfs_fonts.js' %}"></script>
+  <script src="{% static 'plugins/datatables-buttons/js/buttons.html5.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+  <script src="{% static 'dist/js/demo.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.min.js" integrity="sha384-RuyvpeZCxMJCqVUGFI0Do1mQrods/hhxYlcVfGPOfQtPJh0JCw12tUAZ/Mv10S7D" crossorigin="anonymous"></script>
+    
+  <script>
+      let selectedFiles = [];
+      
+      // Select all functionality
+      document.getElementById('selectAll').addEventListener('change', function() {
+          const checkboxes = document.querySelectorAll('input[name="group_ids"]');
+          checkboxes.forEach(checkbox => {
+              checkbox.checked = this.checked;
+          });
+      });
+      
+      // File input change event
+      document.getElementById('fileInput').addEventListener('change', function(e) {
+          Array.from(e.target.files).forEach(file => {
+              if (!selectedFiles.find(f => f.name === file.name && f.size === file.size)) {
+                  selectedFiles.push(file);
+              }
+          });
+          updateFilesList();
+          e.target.value = ''; // Reset input
+      });
+      
+      // Drag and drop
+      const uploadSection = document.getElementById('fileUploadSection');
+      
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+          uploadSection.addEventListener(eventName, preventDefaults, false);
+      });
+      
+      function preventDefaults(e) {
+          e.preventDefault();
+          e.stopPropagation();
+      }
+      
+      ['dragenter', 'dragover'].forEach(eventName => {
+          uploadSection.addEventListener(eventName, highlight, false);
+      });
+      
+      ['dragleave', 'drop'].forEach(eventName => {
+          uploadSection.addEventListener(eventName, unhighlight, false);
+      });
+      
+      function highlight() {
+          uploadSection.classList.add('dragover');
+      }
+      
+      function unhighlight() {
+          uploadSection.classList.remove('dragover');
+      }
+      
+      uploadSection.addEventListener('drop', handleDrop, false);
+      
+      function handleDrop(e) {
+          const dt = e.dataTransfer;
+          const files = dt.files;
+          
+          Array.from(files).forEach(file => {
+              if (!selectedFiles.find(f => f.name === file.name && f.size === file.size)) {
+                  selectedFiles.push(file);
+              }
+          });
+          updateFilesList();
+      }
+      
+      function updateFilesList() {
+          const container = document.getElementById('selectedFiles');
+          container.innerHTML = '';
+          
+          selectedFiles.forEach((file, index) => {
+              const fileItem = createFileItem(file, index);
+              container.appendChild(fileItem);
+          });
+      }
+      
+      function createFileItem(file, index) {
+          const item = document.createElement('div');
+          item.className = 'file-item';
+          
+          const icon = document.createElement('div');
+          icon.className = 'file-icon';
+          
+          if (file.type.startsWith('image/')) {
+              icon.classList.add('image');
+              icon.textContent = '🖼️';
+          } else if (file.type.startsWith('video/')) {
+              icon.classList.add('video');
+              icon.textContent = '🎥';
+          } else if (file.type.startsWith('audio/')) {
+              icon.classList.add('audio');
+              icon.textContent = '🎵';
+          } else {
+              icon.classList.add('document');
+              icon.textContent = '📄';
+          }
+          
+          const details = document.createElement('div');
+          details.className = 'file-details';
+          
+          const name = document.createElement('div');
+          name.className = 'file-name';
+          name.textContent = file.name;
+          
+          const size = document.createElement('div');
+          size.className = 'file-size';
+          size.textContent = formatFileSize(file.size);
+          
+          details.appendChild(name);
+          details.appendChild(size);
+          
+          const removeBtn = document.createElement('button');
+          removeBtn.className = 'remove-file';
+          removeBtn.textContent = '×';
+          removeBtn.type = 'button';
+          removeBtn.addEventListener('click', () => {
+              selectedFiles.splice(index, 1);
+              updateFilesList();
+          });
+          
+          item.appendChild(icon);
+          item.appendChild(details);
+          item.appendChild(removeBtn);
+          
+          return item;
+      }
+      
+      function formatFileSize(bytes) {
+          if (bytes === 0) return '0 Bytes';
+          const k = 1024;
+          const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+          const i = Math.floor(Math.log(bytes) / Math.log(k));
+          return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+      }
+      
+      // Form submission
+      document.getElementById('massMessageForm').addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          const selectedGroups = document.querySelectorAll('input[name="group_ids"]:checked');
+          const messageText = document.getElementById('messageText').value.trim();
+          const sendButton = document.getElementById('sendButton');
+          const loading = document.getElementById('loading');
+          const status = document.getElementById('status');
+          const progressBar = document.getElementById('progressBar');
+          const progressFill = document.getElementById('progressFill');
+          
+          // Validation
+          if (selectedGroups.length === 0) {
+              showStatus('error', 'Kamida bitta guruhni tanlang!');
+              return;
+          }
+          
+          if (!messageText && selectedFiles.length === 0) {
+              showStatus('error', 'Matn yoki fayl kiriting!');
+              return;
+          }
+          
+          // Prepare form data
+          const formData = new FormData();
+          formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+          
+          if (messageText) {
+              formData.append('message_text', messageText);
+          }
+          
+          selectedGroups.forEach(checkbox => {
+              formData.append('group_ids', checkbox.value);
+          });
+          
+          selectedFiles.forEach(file => {
+              formData.append('files', file);
+          });
+          
+          // UI updates
+          sendButton.disabled = true;
+          loading.style.display = 'block';
+          progressBar.style.display = 'block';
+          status.style.display = 'none';
+          
+          let progress = 0;
+          const progressInterval = setInterval(() => {
+              progress += 2;
+              if (progress <= 90) {
+                  progressFill.style.width = progress + '%';
+              }
+          }, 100);
+          
+          // Send request
+          fetch('/send-mass-message/', {
+              method: 'POST',
+              body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+              clearInterval(progressInterval);
+              progressFill.style.width = '100%';
+              
+              if (data.success) {
+                  let message = `✅ Muvaffaqiyat! ${data.successful_sends} ta guruhga yuborildi.`;
+                  if (data.failed_sends > 0) {
+                      message += ` ❌ ${data.failed_sends} ta xatolik.`;
+                      if (data.errors && data.errors.length > 0) {
+                          message += '\n\nXatoliklar:\n' + data.errors.join('\n');
+                      }
+                  }
+                  showStatus('success', message);
+                  
+                  // Clear form on success
+                  document.getElementById('messageText').value = '';
+                  selectedFiles = [];
+                  updateFilesList();
+                  document.querySelectorAll('input[name="group_ids"]').forEach(cb => cb.checked = false);
+                  document.getElementById('selectAll').checked = false;
+              } else {
+                  showStatus('error', `❌ Xatolik: ${data.error}`);
+              }
+          })
+          .catch(error => {
+              clearInterval(progressInterval);
+              showStatus('error', `❌ Xatolik yuz berdi: ${error.message}`);
+          })
+          .finally(() => {
+              sendButton.disabled = false;
+              loading.style.display = 'none';
+              setTimeout(() => {
+                  progressBar.style.display = 'none';
+                  progressFill.style.width = '0%';
+              }, 1000);
+          });
+      });
+      
+      function showStatus(type, message) {
+          const status = document.getElementById('status');
+          status.className = 'status ' + type;
+          status.innerHTML = message.replace(/\n/g, '<br>');
+          status.style.display = 'block';
+          
+          // Auto hide after 10 seconds for success, 15 for error
+          const hideTime = type === 'success' ? 10000 : 15000;
+          setTimeout(() => {
+              status.style.display = 'none';
+          }, hideTime);
+      }
+  </script>
+
+{% endblock %}
