@@ -1,0 +1,29 @@
+body {
+    background-color: #f4f6f9;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box {
+    width: 360px;
+}
+
+.card {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-radius: 10px;
+}
+/* Login sahifasida markazlash (base.html ga tegmaydi) */
+.login-page-wrapper {
+    display: flex;
+    justify-content: center;   /* gorizontal markaz */
+    align-items: center;       /* vertikal markaz */
+    min-height: 100vh;         /* butun ekran balandligi */
+    background-color: #f4f6f9; /* fon */
+}
+
+.login-box {
+    width: 360px;
+}

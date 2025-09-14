@@ -52,12 +52,6 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
-# Media va statik fayllar
-media/
-staticfiles/
-static/
-collected_static/
-
 # Migratsiyalar cache (asosiy fayllar qoladi)
 */migrations/__pycache__/
 */migrations/*.pyc
