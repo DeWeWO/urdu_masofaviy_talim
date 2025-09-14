@@ -1,99 +1,129 @@
 {% load static %}
 
-<div class="container">
-      <div class="header">
-          <h1>Telegram Guruhlariga Ommaviy Xabar Yuborish</h1>
-      </div>
-      
-      <div class="content">
-          <div class="message-panel">
-              <form id="massMessageForm" enctype="multipart/form-data">
-                  {% csrf_token %}
-                  
-                  <div class="form-group">
-                      <label for="messageText">Xabar Matni:</label>
-                      <textarea 
-                          id="messageText" 
-                          name="message_text" 
-                          placeholder="Bu yerga xabar matnini kiriting..."
-                      ></textarea>
-                      <div class="text-formatting-help">
-                          💡 HTML formatlar: <b>&lt;b&gt;qalin&lt;/b&gt;</b>, <i>&lt;i&gt;qiya&lt;/i&gt;</i>, 
-                          <code>&lt;code&gt;kod&lt;/code&gt;</code>, <u>&lt;u&gt;chizilgan&lt;/u&gt;</u>, 
-                          <a href="#" onclick="return false">&lt;a href="link"&gt;havola&lt;/a&gt;</a>
-                      </div>
-                  </div>
-                  
-                  <div class="form-group">
-                      <label>Fayllar (Rasm, Video, Audio, Hujjat):</label>
-                      <div class="file-upload-section" id="fileUploadSection">
-                          <div class="file-input-wrapper">
-                              <input 
-                                  type="file" 
-                                  class="file-input" 
-                                  id="fileInput" 
-                                  name="files" 
-                                  multiple 
-                                  accept="*/*"
-                              >
-                              <div class="file-button">📁 Fayllarni Tanlang</div>
-                          </div>
-                          <div class="file-info">
-                              Bir nechta faylni birdan tanlashingiz mumkin. Max 50MB gacha.
-                          </div>
-                      </div>
-                      
-                      <div class="selected-files" id="selectedFiles"></div>
-                  </div>
-                  
-                  <button type="submit" class="send-button" id="sendButton">
-                      Tanlangan Guruhlarga Yuborish
-                  </button>
-                  
-                  <div class="progress-bar" id="progressBar">
-                      <div class="progress-fill" id="progressFill"></div>
-                  </div>
-                  
-                  <div class="loading" id="loading">
-                      ⏳ Xabarlar yuborilmoqda...
-                  </div>
-                  
-                  <div class="status" id="status"></div>
-              </form>
-          </div>
-          
-          <div class="groups-panel">
-              <h3 style="margin-bottom: 15px;">Telegram Guruhlar</h3>
-              
-              <div class="select-all">
-                  <label>
-                      <input type="checkbox" id="selectAll"> Barchasini tanlash
-                  </label>
-              </div>
-              
-              <div class="groups-list">
-                  {% for group in groups %}
-                  <div class="group-item">
-                      <input 
-                          type="checkbox" 
-                          class="group-checkbox" 
-                          name="group_ids" 
-                          value="{{ group.group_id }}"
-                          id="group_{{ group.group_id }}"
-                      >
-                      <div class="group-info">
-                          <div class="group-name">{{ group.group_name|default:"Noma'lum Guruh" }}</div>
-                          <div class="group-id">ID: {{ group.group_id }}</div>
-                      </div>
-                  </div>
-                  {% empty %}
-                  <div class="group-item">
-                      <div class="group-info">
-                          <div class="group-name">Guruhlar topilmadi</div>
-                      </div>
-                  </div>
-                  {% endfor %}
-              </div>
-          </div>
-      </div>
-  </div>
+<div class="content-wrapper">
+    <section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1>Telegram Guruhlar</h1>
+        </div>
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{% url 'main_view' %}">Home</a></li>
+            <li class="breadcrumb-item active">Telegram Guruhlar</li>
+            </ol>
+        </div>
+        </div>
+    </div>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+    <div class="telegram-mass-message">
+        <div class="tg-header">
+        <h1>Telegram Guruhlariga Ommaviy Xabar Yuborish</h1>
+        </div>
+        
+        <div class="tg-content">
+        <div class="tg-message-panel">
+            <form id="massMessageForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="tg-form-group">
+                <label for="messageText" class="tg-label">📝 Xabar Matni:</label>
+                <textarea 
+                id="messageText" 
+                name="message_text" 
+                class="tg-textarea"
+                placeholder="Bu yerga xabar matnini kiriting..."
+                ></textarea>
+                <div class="tg-text-formatting-help">
+                💡 <strong>HTML formatlar:</strong> 
+                <code>&lt;b&gt;qalin&lt;/b&gt;</code>, 
+                <code>&lt;i&gt;qiya&lt;/i&gt;</code>, 
+                <code>&lt;code&gt;kod&lt;/code&gt;</code>, 
+                <code>&lt;u&gt;chizilgan&lt;/u&gt;</code>, 
+                <code>&lt;a href="link"&gt;havola&lt;/a&gt;</code>
+                </div>
+            </div>
+            
+            <div class="tg-form-group">
+                <label class="tg-label">📎 Fayllar (Rasm, Video, Audio, Hujjat):</label>
+                <div class="tg-file-upload-section" id="fileUploadSection">
+                <div class="tg-file-input-wrapper">
+                    <input 
+                    type="file" 
+                    class="tg-file-input" 
+                    id="fileInput" 
+                    name="files" 
+                    multiple 
+                    accept="*/*"
+                    >
+                    <div class="tg-file-button">
+                    📁 Fayllarni Tanlang
+                    </div>
+                </div>
+                <div class="tg-file-info">
+                    Fayllarni bu yerga sudrab keling yoki tugmani bosing.<br>
+                    Bir nechta faylni birdan tanlashingiz mumkin. <strong>Max 50MB gacha.</strong>
+                </div>
+                </div>
+                
+                <div class="tg-selected-files" id="selectedFiles"></div>
+            </div>
+            
+            <button type="submit" class="tg-send-button" id="sendButton">
+                🚀 Tanlangan Guruhlarga Yuborish
+            </button>
+            
+            <div class="tg-progress-bar" id="progressBar">
+                <div class="tg-progress-fill" id="progressFill"></div>
+            </div>
+            
+            <div class="tg-loading" id="loading">
+                ⏳ Xabarlar yuborilmoqda...
+            </div>
+            
+            <div class="tg-status" id="status"></div>
+            </form>
+        </div>
+        
+        <div class="tg-groups-panel">
+            <h3>👥 Telegram Guruhlar</h3>
+            
+            <div class="tg-select-all">
+            <label>
+                <input type="checkbox" id="selectAll" class="tg-group-checkbox"> 
+                <strong>Barchasini tanlash</strong>
+            </label>
+            </div>
+            
+            <div class="tg-groups-list">
+            {% for group in groups %}
+            <div class="tg-group-item">
+                <input 
+                type="checkbox" 
+                class="tg-group-checkbox" 
+                name="group_ids" 
+                value="{{ group.group_id }}"
+                id="group_{{ group.group_id }}"
+                >
+                <div class="tg-group-info">
+                <div class="tg-group-name">{{ group.group_name|default:"Noma'lum Guruh" }}</div>
+                <div class="tg-group-id">ID: {{ group.group_id }}</div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="tg-group-item">
+                <div class="tg-group-info">
+                <div class="tg-group-name">❌ Guruhlar topilmadi</div>
+                <div class="tg-group-id">Iltimos, avval guruhlar qo'shing</div>
+                </div>
+            </div>
+            {% endfor %}
+            </div>
+        </div>
+        </div>
+    </div>
+    </section>
+</div>
